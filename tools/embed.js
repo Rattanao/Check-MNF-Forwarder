@@ -23,14 +23,24 @@
       background: #1f3f94; color: #fff; padding: 10px 16px; border-radius: 8px; font: 500 14px/1.4 "Sarabun", Tahoma, sans-serif;
       box-shadow: 0 4px 14px rgba(0,0,0,.2); transition: opacity .3s; }
     .x-toast.warn { background: #b4441c; }
+    .x-toast-btn { font: inherit; font-weight: 600; margin-left: 6px; padding: 2px 10px; border-radius: 5px; cursor: pointer;
+      background: #fff; color: #1f3f94; border: 0; }
   `;
   document.head.appendChild(style);
 
   let toastTimer;
-  function toast(text, warn) {
+  function toast(text, warn, action) {
     let t = document.querySelector(".x-toast");
     if (!t) { t = document.createElement("div"); t.className = "x-toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
     t.textContent = text;
+    if (action) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "x-toast-btn";
+      b.textContent = action.label;
+      b.addEventListener("click", action.run);
+      t.append(" ", b);
+    }
     t.classList.toggle("warn", !!warn);
     t.style.opacity = "1";
     clearTimeout(toastTimer);
@@ -51,10 +61,46 @@
     const pickerId = ("t-" + (parts.pop() || "index").replace(/\W/g, "")).slice(0, 32);
     let batch = null;   // ไฟล์ที่ดาวน์โหลดจากการกดครั้งเดียวกัน (เช่น DO ได้ 2 ไฟล์) ใช้โฟลเดอร์เดียวกัน ถามครั้งเดียว
 
+    // จำโฟลเดอร์ที่เลือกไว้ใน IndexedDB: ครั้งต่อไปบันทึกลงโฟลเดอร์เดิมทันทีโดยไม่ต้องเลือกใหม่
+    // ถ้าเบราว์เซอร์ถามสิทธิ์อีก ให้กด "อนุญาตทุกครั้งที่เข้าชม" แล้วจะไม่ถามอีก
+    function db() {
+      return new Promise((ok, bad) => {
+        const r = indexedDB.open("edi-folders", 1);
+        r.onupgradeneeded = () => r.result.createObjectStore("dirs");
+        r.onsuccess = () => ok(r.result);
+        r.onerror = () => bad(r.error);
+      });
+    }
+    async function dbDo(mode, fn) {
+      const d = await db();
+      return new Promise((ok, bad) => {
+        const r = fn(d.transaction("dirs", mode).objectStore("dirs"));
+        r.onsuccess = () => ok(r.result);
+        r.onerror = () => bad(r.error);
+      });
+    }
+    const loadDir = () => dbDo("readonly", s => s.get(pickerId)).catch(() => null);
+    const saveDir = h => dbDo("readwrite", s => s.put(h, pickerId)).catch(() => {});
+    const forgetDir = () => dbDo("readwrite", s => s.delete(pickerId)).catch(() => {});
+
+    async function getDir() {
+      const saved = await loadDir();
+      if (saved) {
+        const opts = { mode: "readwrite" };
+        try {
+          if (await saved.queryPermission(opts) === "granted") return saved;
+          if (await saved.requestPermission(opts) === "granted") return saved;
+        } catch (e) { console.warn("saved folder unavailable:", e); }
+      }
+      const dir = await window.showDirectoryPicker({ id: pickerId, mode: "readwrite" });
+      await saveDir(dir);
+      return dir;
+    }
+
     function pickFolder() {
       if (batch && (batch.doneAt === null || Date.now() - batch.doneAt < 10000)) return batch.dir;
       const b = { doneAt: null };
-      b.dir = window.showDirectoryPicker({ id: pickerId, mode: "readwrite" });
+      b.dir = getDir();
       b.dir.then(() => { b.doneAt = Date.now(); }, () => { b.doneAt = Date.now(); });
       batch = b;
       return b.dir;
@@ -71,7 +117,8 @@
           const w = await fh.createWritable();
           await w.write(await data);
           await w.close();
-          toast(`บันทึก ${fileName} ลงโฟลเดอร์ ${dir.name} แล้ว`);
+          toast(`บันทึก ${fileName} ลงโฟลเดอร์ ${dir.name} แล้ว`, false,
+            { label: "เปลี่ยนโฟลเดอร์", run: () => { forgetDir(); toast("ครั้งหน้าจะให้เลือกโฟลเดอร์ใหม่"); } });
         })
         .catch(err => {
           // ไม่ว่าจะกดยกเลิก เลือกโฟลเดอร์ที่เบราว์เซอร์บล็อก (เช่น Downloads ชั้นนอกสุด, Desktop) ไม่อนุญาต
