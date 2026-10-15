@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Check EDI CMA</title>
+<title>Check EDI CMS</title>
 <script src="../embed.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
@@ -83,13 +83,13 @@
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>CHECK EDI CMA</h1><p>ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMA): CONSIGNEE · CNTR · STATUS · PKG · G.W. · MEAS. · MARKS · DESC · DG · TRANSIT</p><div class="by">Project by Ms. Rattana Mudlae<br>Position Import DOC.</div></div></header>
+<header><div class="wrap"><h1>CHECK EDI CMS</h1><p>ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS): CONSIGNEE · CNTR · STATUS · PKG · G.W. · MEAS. · MARKS · DESC · DG · TRANSIT</p><div class="by">Project by Ms. Rattana Mudlae<br>Position Import DOC.</div></div></header>
 
 <main class="wrap">
   <section class="card">
     <div class="top">
       <div>
-        <label class="t">ไฟล์ MANIFEST (.xls / .xlsx) และ ENTER ฟอร์ม AMENDMENT ของ CMA (.pdf — ได้หลายไฟล์)</label>
+        <label class="t">ไฟล์ MANIFEST (.xls / .xlsx) และ ENTER ฟอร์ม AMENDMENT ของ CMS (.pdf — ได้หลายไฟล์)</label>
         <div class="drop" id="drop"><span>ลากไฟล์มาวางพร้อมกัน หรือ <b>คลิกเพื่อเลือกไฟล์</b></span></div>
         <input type="file" id="file" accept=".xls,.xlsx,.pdf" multiple class="hidden">
         <div class="files" id="files"></div>
@@ -119,12 +119,12 @@
     <div class="tbl"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
   </section>
 </main>
-<footer><a href="../guide.html">คู่มือการใช้งาน / ดาวน์โหลดโปรแกรม</a> · <a href="https://github.com/Rattanao/CMA">github.com/Rattanao/CMA</a></footer>
+<footer><a href="../guide.html">คู่มือการใช้งาน / ดาวน์โหลดโปรแกรม</a> · <a href="https://github.com/Rattanao/CMS">github.com/Rattanao/CMS</a></footer>
 
 <script src="core.js"></script>
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-const C = window.CheckCMA;
+const C = window.CheckCMS;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 let files = [];   // {name, size, kind, rows|pages}
@@ -171,7 +171,7 @@ function run() {
     const { MAN, vessel, declared, blRe } = C.parseManifest(mf.rows);
     if (!Object.keys(MAN).length) { $("msg").textContent = "อ่าน B/L จาก MANIFEST ไม่ได้ ตรวจว่าเป็นรายงาน CARGO MANIFEST ของสายเรือ"; return; }
     const notCms = enters.filter(f => !C.isCmsInbound(f.pages)).map(f => f.name);
-    if (notCms.length) { $("msg").textContent = "ไฟล์นี้ไม่ใช่ฟอร์ม AMENDMENT ของ CMA (ไม่พบหน้า 'INBOUND CARGO MANIFEST' / 'D/O No.') — หน้านี้รองรับเฉพาะฟอร์ม CMA:\n" + notCms.join("\n"); return; }
+    if (notCms.length) { $("msg").textContent = "ไฟล์นี้ไม่ใช่ฟอร์ม AMENDMENT ของ CMS (ไม่พบหน้า 'INBOUND CARGO MANIFEST' / 'D/O No.') — หน้านี้รองรับเฉพาะฟอร์ม CMS:\n" + notCms.join("\n"); return; }
     const { ENT, declared: entDecl } = C.parseEnter(enters.flatMap(f => f.pages), blRe);
     if (!Object.keys(ENT).length) { $("msg").textContent = "อ่าน B/L จาก ENTER ไม่ได้ — เลข B/L ใน ENTER ไม่ตรงกับรูปแบบเลข B/L ใน MANIFEST"; return; }
     report = C.buildReport(MAN, ENT, vessel, declared, entDecl, { expectedShed: $("shed").value });

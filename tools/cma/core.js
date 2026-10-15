@@ -1,4 +1,4 @@
-/* CHECK EDI CMA — ตรรกะตรวจ MANIFEST (.xls) เทียบ ENTER (.pdf "INBOUND CARGO MANIFEST" ของ CMS Logistics)
+/* CHECK EDI CMS — ตรรกะตรวจ MANIFEST (.xls) เทียบ ENTER (.pdf "INBOUND CARGO MANIFEST" ของ CMS Logistics)
    พอร์ตจาก scripts/build_edi.py (layout F) ทำงานในเบราว์เซอร์ล้วน ๆ ไม่มีการอัปโหลด
    ฐานเดียวกับ Check EDI AGN (github.com/Rattanao/check-edi-AGN) ต่างกันที่ตัวอ่าน ENTER */
 (function (root) {
@@ -752,6 +752,6 @@
     return pages;
   }
 
-  root.CheckCMA = { pdfPages, HEADERS, KEYS, NUMKEYS, WIDEKEYS, parseManifest, parseEnter, isCmsInbound, buildReport, WARN, OK,
+  root.CheckCMS = { pdfPages, HEADERS, KEYS, NUMKEYS, WIDEKEYS, parseManifest, parseEnter, isCmsInbound, buildReport, WARN, OK,
     _t: { canonPkg, canonStatus, normCo, comatch, sameDetail, extractTransitPhrase, findDestCountry } };
 })(typeof window !== "undefined" ? window : globalThis);

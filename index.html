@@ -135,9 +135,10 @@ const ICON = {
 };
 const GROUPS = [
   { name: "ตรวจสอบ EDI Forwarder", tools: [
+    { id: "able",      title: "Check EDI Able",      desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Able) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
     { id: "agn",       title: "Check EDI AGN",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ AGN) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
     { id: "cargoport", title: "Check EDI Cargoport", desc: "ตรวจเทียบ MANIFEST กับ ENTER (Cargoport) → EDI.xlsx", src: "tools/cargoport/index.html", icon: "check" },
-    { id: "cma",       title: "Check EDI CMA",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMA) → EDI.xlsx", src: "tools/cma/index.html", icon: "check" },
+    { id: "cma",       title: "Check EDI CMS",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS) → EDI.xlsx", src: "tools/cma/index.html", icon: "check" },
     { id: "dsv",       title: "Check EDI DSV",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ DSV) → EDI.xlsx", src: "tools/dsv/index.html", icon: "check" },
     { id: "gateway",   title: "Check EDI Gateway",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม Gateway) → EDI.xlsx", src: "tools/gateway/index.html", icon: "check" },
     { id: "m-corp",    title: "Check EDI M-CORP",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ THE M CORP) → EDI.xlsx", src: "tools/m-corp/index.html", icon: "check" },
