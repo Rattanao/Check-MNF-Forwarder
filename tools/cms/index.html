@@ -19,7 +19,9 @@
   * { box-sizing: border-box; }
   body { margin: 0; font-family: "Sarabun", Tahoma, sans-serif; background: var(--bg); color: var(--text); }
   header { background: var(--navy); color: #fff; padding: 18px 16px; }
-  header .wrap { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  header .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header .logo { background: #fff; border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; }
+  header .logo img { display: block; height: 44px; width: auto; }
   header h1 { margin: 0; font-size: 26px; letter-spacing: 1px; }
   header p { margin: 0; opacity: .8; font-size: 15px; }
   header .by { margin-left: auto; align-self: center; text-align: right; font-size: 13px; line-height: 1.5; opacity: .9; }
@@ -83,7 +85,7 @@
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>CHECK EDI CMS</h1><p>ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS): CONSIGNEE · CNTR · STATUS · PKG · G.W. · MEAS. · MARKS · DESC · DG · TRANSIT</p><div class="by">Project by Ms. Rattana Mudlae<br>Position Import DOC.</div></div></header>
+<header><div class="wrap"><span class="logo"><img src="hal-logo.png" alt="Heung A Line Co., Ltd." width="224" height="55"></span><h1>CHECK EDI CMS</h1><p>ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS): CONSIGNEE · CNTR · STATUS · PKG · G.W. · MEAS. · MARKS · DESC · DG · TRANSIT</p><div class="by">Project by Ms. Rattana Mudlae<br>Position Import DOC.</div></div></header>
 
 <main class="wrap">
   <section class="card">

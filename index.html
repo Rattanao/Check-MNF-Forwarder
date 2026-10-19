@@ -138,14 +138,15 @@ const GROUPS = [
     { id: "able",      title: "Check EDI Able",      desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Able) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
     { id: "agn",       title: "Check EDI AGN",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ AGN) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
     { id: "cargoport", title: "Check EDI Cargoport", desc: "ตรวจเทียบ MANIFEST กับ ENTER (Cargoport) → EDI.xlsx", src: "tools/cargoport/index.html", icon: "check" },
-    { id: "cma",       title: "Check EDI CMS",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS) → EDI.xlsx", src: "tools/cma/index.html", icon: "check" },
+    { id: "cms",       title: "Check EDI CMS",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS) → EDI.xlsx", src: "tools/cms/index.html", icon: "check" },
     { id: "dsv",       title: "Check EDI DSV",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ DSV) → EDI.xlsx", src: "tools/dsv/index.html", icon: "check" },
     { id: "gateway",   title: "Check EDI Gateway",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม Gateway) → EDI.xlsx", src: "tools/gateway/index.html", icon: "check" },
     { id: "m-corp",    title: "Check EDI M-CORP",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ THE M CORP) → EDI.xlsx", src: "tools/m-corp/index.html", icon: "check" },
     { id: "mac-nels",  title: "Check EDI MAC-NELS",  desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม ATTACHED SHEETS ของ MAC-NELS SHIPPING) → EDI.xlsx", src: "tools/mac-nels/index.html", icon: "check" },
     { id: "penanshin", title: "Check EDI Penanshin", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ Penanshin) → EDI.xlsx", src: "tools/penanshin/index.html", icon: "check" },
     { id: "quality",   title: "Check EDI Quality",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Quality) → EDI.xlsx", src: "tools/quality/index.html", icon: "check" },
-    { id: "shipco",    title: "Check EDI Shipco",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Shipco) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" }
+    { id: "shipco",    title: "Check EDI Shipco",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Shipco) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" },
+    { id: "union-world", title: "Check EDI Union World", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Union World) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
   ]}
 ];
 const TOOLS = GROUPS.flatMap(g => g.tools.map(t => ({ ...t, group: g.name })));
