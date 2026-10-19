@@ -1,8 +1,32 @@
 // โหลดในทุกเครื่องมือ (ใส่ไว้ใน <head>) เพื่อเพิ่มของที่เว็บรวมต้องการโดยไม่แก้โค้ดต้นฉบับ:
 //  1. แสดงในเว็บรวม: ซ่อนหัว/ท้ายของเครื่องมือ ใช้ธีมสว่าง
 //  2. ปุ่ม "ลบไฟล์" ข้างปุ่มประมวลผล สำหรับเครื่องมือที่ยังไม่มี
+//  3. ตั้งชื่อไฟล์ดาวน์โหลดตามเครื่องมือ เช่น EDI.xlsx -> "EDI Union World.xlsx"
 // ดาวน์โหลด: ใช้การดาวน์โหลดปกติของเบราว์เซอร์ ไฟล์ลงโฟลเดอร์ Downloads เสมอ ไม่ถามโฟลเดอร์
 (function () {
+  // ชื่อที่ใช้ต่อท้ายไฟล์ ตามโฟลเดอร์ tools/<ชื่อ>/ (เพิ่มเครื่องมือใหม่: เพิ่มที่นี่ด้วย)
+  const NAMES = {
+    "able": "Able", "agn": "AGN", "cargoport": "Cargoport", "cms": "CMS", "dsv": "DSV",
+    "gateway": "Gateway", "m-corp": "M-CORP", "mac-nels": "MAC-NELS", "penanshin": "Penanshin",
+    "quality": "Quality", "shipco": "Shipco", "union-world": "Union World"
+  };
+  const folder = location.pathname.split("/").filter(p => p && p !== "index.html").pop() || "";
+  const toolName = NAMES[folder] || document.title.replace(/^check\s+edi\s*/i, "").trim();
+
+  // เครื่องมือทุกตัวดาวน์โหลดด้วย <a download="EDI.xlsx" href="blob:..."> แล้วเรียก a.click() จึงเปลี่ยนชื่อที่จุดนี้
+  if (toolName) {
+    const realClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+      const name = this.getAttribute("download");
+      if (name && !name.includes(toolName)) {
+        const dot = name.lastIndexOf(".");
+        const base = dot > 0 ? name.slice(0, dot) : name, ext = dot > 0 ? name.slice(dot) : "";
+        this.download = `${base} ${toolName}${ext}`;
+      }
+      return realClick.call(this);
+    };
+  }
+
   const root = document.documentElement;
   if (window.self !== window.top) {
     root.classList.add("embedded");
