@@ -29,9 +29,11 @@ cargoport Cargoport
 cms CMS
 dsv check-edi-DSV
 gateway Gateway
+lx-pantos LX-Pantos
 m-corp M-CORP
 mac-nels MAC-NELS
 penanshin Penanshin
+planet Planet
 quality check-edi-Quality
 shipco check-edi-Shipco
 union-world Union-world

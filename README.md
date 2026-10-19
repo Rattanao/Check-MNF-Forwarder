@@ -1,6 +1,6 @@
 # Check MNF Forwarder
 
-รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 12 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
+รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 14 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
 
 เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/
 
@@ -12,9 +12,11 @@
 | CMS | [CMS](https://github.com/Rattanao/CMS) |
 | DSV | [check-edi-DSV](https://github.com/Rattanao/check-edi-DSV) |
 | Gateway | [Gateway](https://github.com/Rattanao/Gateway) |
+| LX Pantos | [LX-Pantos](https://github.com/Rattanao/LX-Pantos) |
 | M-CORP | [M-CORP](https://github.com/Rattanao/M-CORP) |
 | MAC-NELS | [MAC-NELS](https://github.com/Rattanao/MAC-NELS) |
 | Penanshin | [Penanshin](https://github.com/Rattanao/Penanshin) |
+| Planet | [Planet](https://github.com/Rattanao/Planet) |
 | Quality | [check-edi-Quality](https://github.com/Rattanao/check-edi-Quality) |
 | Shipco | [check-edi-Shipco](https://github.com/Rattanao/check-edi-Shipco) |
 | Union World | [Union-world](https://github.com/Rattanao/Union-world) |
