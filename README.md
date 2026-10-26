@@ -1,6 +1,6 @@
 # Check MNF Forwarder
 
-รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 14 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
+รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 15 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
 
 เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/
 
@@ -11,6 +11,7 @@
 | Cargoport | [Cargoport](https://github.com/Rattanao/Cargoport) |
 | CMS | [CMS](https://github.com/Rattanao/CMS) |
 | DSV | [check-edi-DSV](https://github.com/Rattanao/check-edi-DSV) |
+| Eastern Air | [Eastern-Air](https://github.com/Rattanao/Eastern-Air) |
 | Gateway | [Gateway](https://github.com/Rattanao/Gateway) |
 | LX Pantos | [LX-Pantos](https://github.com/Rattanao/LX-Pantos) |
 | M-CORP | [M-CORP](https://github.com/Rattanao/M-CORP) |

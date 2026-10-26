@@ -28,6 +28,7 @@ agn check-edi-AGN
 cargoport Cargoport
 cms CMS
 dsv check-edi-DSV
+eastern-air Eastern-Air
 gateway Gateway
 lx-pantos LX-Pantos
 m-corp M-CORP

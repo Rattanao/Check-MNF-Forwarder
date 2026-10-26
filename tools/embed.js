@@ -6,7 +6,7 @@
 (function () {
   // ชื่อที่ใช้ต่อท้ายไฟล์ ตามโฟลเดอร์ tools/<ชื่อ>/ (เพิ่มเครื่องมือใหม่: เพิ่มที่นี่ด้วย)
   const NAMES = {
-    "able": "Able", "agn": "AGN", "cargoport": "Cargoport", "cms": "CMS", "dsv": "DSV",
+    "able": "Able", "agn": "AGN", "cargoport": "Cargoport", "cms": "CMS", "dsv": "DSV", "eastern-air": "Eastern Air",
     "gateway": "Gateway", "lx-pantos": "LX Pantos", "m-corp": "M-CORP", "mac-nels": "MAC-NELS", "penanshin": "Penanshin", "planet": "Planet",
     "quality": "Quality", "shipco": "Shipco", "union-world": "Union World"
   };

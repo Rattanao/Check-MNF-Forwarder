@@ -411,10 +411,12 @@
         const gwT = wm.find(t => /KG/i.test(t)), meT = wm.find(t => /CBM|M3/i.test(t));
         const qm = qty.match(QTY_RE);
         const combined = `${marks} ${desc}`;
+        // 'CARGO MOVEMENT: L' / 'CARGO MOVEMENT: 7' is printed inside this B/L's own goods block (above its D/O No. row)
+        const mvm = combined.match(/CARGO\s*MOVEMENT\s*:?\s*([0-9A-Za-z][0-9A-Za-z\-]*)/i);
         ENT[bl] = { bl, cons, cont, pkgs: qm ? parseInt(qm[1].replace(/,/g, ""), 10) : null, pkgtype: qm ? qm[2].trim() : "",
           gw: gwT ? num(gwT) : null, meas: meT ? num(meT) : null, marks, desc,
           status_raw: globalStatus, transit_raw: TRANSIT_RE.test(combined) ? combined : "",
-          dg: findDg(combined), reefer: findTemp(combined), movement_raw: "" };
+          dg: findDg(combined), reefer: findTemp(combined), movement_raw: mvm ? mvm[1].toUpperCase() : "" };
       }
     });
 
