@@ -132,9 +132,13 @@ const ICON = {
   cut:   '<circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8 8.5L20 17M8 15.5L20 7"/>',
   temp:  '<path d="M10 14V5a2 2 0 014 0v9a4 4 0 11-4 0z"/><path d="M12 10v6"/>',
   doc:   '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  all:   '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5l2.5 2.5 4.5-5"/>',
   book:  '<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5M8 7h8M8 11h6"/>'
 };
 const GROUPS = [
+  { name: "ตรวจทุกเจ้า · Check all", tools: [
+    { id: "all", title: "Check all files", desc: "ใส่ MANIFEST / ENTER ของ Forwarder ไหนก็ได้ ระบบหาเจ้าของฟอร์มให้เอง แล้วตรวจด้วยกฎของเจ้านั้น → EDI <ชื่อเจ้า>.xlsx", src: "tools/all/index.html", icon: "all" }
+  ]},
   { name: "ตรวจสอบ EDI Forwarder", tools: [
     { id: "able",      title: "Check EDI Able",      desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Able) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
     { id: "agn",       title: "Check EDI AGN",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ AGN) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
@@ -142,7 +146,9 @@ const GROUPS = [
     { id: "cms",       title: "Check EDI CMS",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS) → EDI.xlsx", src: "tools/cms/index.html", icon: "check" },
     { id: "dsv",       title: "Check EDI DSV",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ DSV) → EDI.xlsx", src: "tools/dsv/index.html", icon: "check" },
     { id: "eastern-air", title: "Check EDI Eastern Air", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ Eastern Air) → EDI.xlsx", src: "tools/eastern-air/index.html", icon: "check" },
+    { id: "freight-links", title: "Check EDI Freight Links", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม IMPORT CARGO MANIFEST ของ Freight Links) → EDI.xlsx", src: "tools/freight-links/index.html", icon: "check" },
     { id: "gateway",   title: "Check EDI Gateway",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม Gateway) → EDI.xlsx", src: "tools/gateway/index.html", icon: "check" },
+    { id: "handle-inter", title: "Check EDI Handle Inter", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (AMENDMENT ของ H.I.T. INTERCON / Handle Inter) → EDI.xlsx", src: "tools/handle-inter/index.html", icon: "check" },
     { id: "lx-pantos", title: "Check EDI LX Pantos", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ LX PANTOS) → EDI.xlsx", src: "tools/lx-pantos/index.html", icon: "check" },
     { id: "m-corp",    title: "Check EDI M-CORP",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ THE M CORP) → EDI.xlsx", src: "tools/m-corp/index.html", icon: "check" },
     { id: "mac-nels",  title: "Check EDI MAC-NELS",  desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม ATTACHED SHEETS ของ MAC-NELS SHIPPING) → EDI.xlsx", src: "tools/mac-nels/index.html", icon: "check" },
@@ -150,6 +156,7 @@ const GROUPS = [
     { id: "planet",    title: "Check EDI Planet",    desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์ม AMENDMENT ของ UNITEX (Planet)) → EDI.xlsx", src: "tools/planet/index.html", icon: "check" },
     { id: "quality",   title: "Check EDI Quality",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Quality) → EDI.xlsx", src: "tools/quality/index.html", icon: "check" },
     { id: "shipco",    title: "Check EDI Shipco",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Shipco) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" },
+    { id: "sinotrans", title: "Check EDI Sinotrans", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (จดหมายแก้ MANIFEST ของ SINOTRANS) → EDI.xlsx", src: "tools/sinotrans/index.html", icon: "check" },
     { id: "union-world", title: "Check EDI Union World", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Union World) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
   ]},
   { name: "คู่มือ · Guide", tools: [

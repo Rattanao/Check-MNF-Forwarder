@@ -2,7 +2,7 @@
 # ดึงเครื่องมือเวอร์ชันล่าสุดจาก repo ต้นฉบับมาไว้ใน tools/<ชื่อ>/
 # ใช้: bash sync.sh   (ต้องมี git) แล้ว commit + push
 # เพิ่มเครื่องมือใหม่: เพิ่มบรรทัด "<ชื่อโฟลเดอร์> <repo>" ด้านล่าง, เพิ่มเมนูใน index.html (GROUPS)
-#   และชื่อไฟล์ดาวน์โหลดใน tools/embed.js (NAMES)
+#   ชื่อไฟล์ดาวน์โหลดใน tools/embed.js (NAMES) และรายชื่อใน tools/all/index.html (TOOLS)
 set -e
 cd "$(dirname "$0")"
 tmp=$(mktemp -d)
@@ -29,7 +29,9 @@ cargoport Cargoport
 cms CMS
 dsv check-edi-DSV
 eastern-air Eastern-Air
+freight-links Freight-links
 gateway Gateway
+handle-inter Handle-inter
 lx-pantos LX-Pantos
 m-corp M-CORP
 mac-nels MAC-NELS
@@ -37,5 +39,6 @@ penanshin Penanshin
 planet Planet
 quality check-edi-Quality
 shipco check-edi-Shipco
+sinotrans Sinotrans
 union-world Union-world
 EOF

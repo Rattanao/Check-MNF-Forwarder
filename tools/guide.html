@@ -84,6 +84,7 @@ li { margin: 2px 0; }
   <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;ชื่อ Forwarder&gt;.xlsx</span></div>
   <p class="note">ไฟล์ประมวลผลในเบราว์เซอร์ของเครื่องคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด · ไม่ต้องติดตั้งโปรแกรม</p>
   <nav class="toc">
+    <a href="#th-all">Check all files</a>
     <a href="#th-steps">ขั้นตอนการใช้งาน</a>
     <a href="#th-menu">เลือกเมนูให้ตรงฟอร์ม</a>
     <a href="#th-report">อ่านรายงาน</a>
@@ -91,11 +92,21 @@ li { margin: 2px 0; }
     <a href="#th-help">ถ้าเจอปัญหา</a>
   </nav>
 
+  <h2 id="th-all">Check all files — ไม่ต้องเลือกเมนูเอง</h2>
+  <p>เมนูบนสุด <b>Check all files</b> รับ MANIFEST และ ENTER ของ Forwarder ไหนก็ได้ แล้วหาให้เองว่า ENTER แต่ละไฟล์เป็นฟอร์มของใคร จากนั้นตรวจด้วยกฎของเจ้านั้น</p>
+  <ol class="steps">
+    <li><div><b>ใส่ไฟล์ MANIFEST 1 ไฟล์ และ ENTER กี่ไฟล์ก็ได้</b> ENTER หลายเจ้าในเรือลำเดียวกันใส่พร้อมกันได้ · ใส่ SHED NO. ได้เหมือนเมนูปกติ</div></li>
+    <li><div><b>กด “ตรวจสอบ”</b> เวปลองอ่าน ENTER ด้วยตัวตรวจของทุกเจ้า (ใช้เวลาราว 5–20 วินาที) แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด ถ้าหลายเจ้าใช้ฟอร์มเดียวกัน (เช่น INBOUND CARGO MANIFEST ของ CMS / Eastern Air / M-CORP / Penanshin) ดูจากชื่อเจ้าในเอกสารหรือชื่อไฟล์</div></li>
+    <li><div><b>ดูตาราง “เป็นของ”</b> ว่าแต่ละไฟล์ถูกจับคู่กับเจ้าไหน ถ้าไม่ถูก ให้ใช้เมนูของเจ้านั้นโดยตรง · ไฟล์ที่ขึ้น <b>ไม่รู้จักฟอร์มนี้</b> ยังไม่มีเมนูที่อ่านได้</div></li>
+    <li><div><b>ผลแยกเป็นแท็บละเจ้า</b> แต่ละแท็บคือหน้าของเจ้านั้นเอง ค้นหา กรอง และดาวน์โหลด <code>EDI &lt;ชื่อเจ้า&gt;.xlsx</code> ได้ตามปกติ</div></li>
+  </ol>
+  <p class="note">ENTER ที่รวมหลายฟอร์มในไฟล์เดียว (เช่นชุดรวมของ HAHM) จะแยกเป็นหลายแท็บ แต่ละแท็บเห็นเฉพาะ B/L ที่ฟอร์มของเจ้านั้นอ่านได้ ที่เหลือขึ้นสีเหลือง — ไฟล์แบบนี้ต้องตรวจซ้ำด้วยคนเสมอ</p>
+
   <h2 id="th-steps">ขั้นตอนการใช้งาน</h2>
   <ol class="steps">
     <li><div><b>เลือก Forwarder จากเมนูด้านซ้าย</b> ให้ตรงกับผู้ส่ง ENTER ค้นหาจากช่อง “ค้นหาเครื่องมือ” ได้ บนมือถือกดปุ่ม ☰ เพื่อเปิดเมนู</div></li>
     <li><div><b>ใส่ไฟล์</b> ลากไฟล์ MANIFEST และ ENTER มาวางพร้อมกัน หรือคลิกกรอบเพื่อเลือกไฟล์
-      <br><span class="note">ตั้งชื่อไฟล์อะไรก็ได้ เวปแยกให้เอง (.xls/.xlsx = MANIFEST, .pdf = ENTER) · ENTER หลายไฟล์ของเรือลำเดียวกันใส่พร้อมกันได้ · Able, LX Pantos, Planet, Union World รับ MANIFEST แบบ PDF “CARGO MANIFEST” ได้ด้วย</span></div></li>
+      <br><span class="note">ตั้งชื่อไฟล์อะไรก็ได้ เวปแยกให้เอง (.xls/.xlsx = MANIFEST, .pdf = ENTER) · ENTER หลายไฟล์ของเรือลำเดียวกันใส่พร้อมกันได้ · Able, Handle Inter, LX Pantos, Planet, Sinotrans, Union World รับ MANIFEST แบบ PDF “CARGO MANIFEST” ได้ด้วย</span></div></li>
     <li><div><b>ใส่ SHED NO. (ถ้ามี)</b> เช่น <code>0141</code> ทุก B/L ต้องตรงเลขนี้ ยกเว้นสินค้าไป LAOS · ถ้าไม่รู้เว้นว่างได้</div></li>
     <li><div><b>กดปุ่ม “ตรวจสอบ”</b> ปุ่มจะกดได้เมื่อใส่ไฟล์ครบทั้ง MANIFEST และ ENTER</div></li>
     <li><div><b>ดูผลบนหน้าจอ</b> ค้นหา B/L / ผู้รับ / เลขตู้ ได้ และติ๊ก “แสดงเฉพาะที่ไม่ตรง” เพื่อดูเฉพาะแถวที่ต้องแก้</div></li>
@@ -114,7 +125,9 @@ li { margin: 2px 0; }
       <tr><td>CMS</td><td>AMENDMENT ของ CMS</td><td>–</td></tr>
       <tr><td>DSV</td><td>AMENDMENT OF MANIFEST ของ DSV</td><td>–</td></tr>
       <tr><td>Eastern Air</td><td>INBOUND CARGO MANIFEST ของ Eastern Air</td><td>–</td></tr>
+      <tr><td>Freight Links</td><td>IMPORT CARGO MANIFEST ของ Freight Links</td><td>–</td></tr>
       <tr><td>Gateway</td><td>ENTER ของ Gateway</td><td>–</td></tr>
+      <tr><td>Handle Inter</td><td>AMENDMENT ของ H.I.T. INTERCON / Handle Inter</td><td>ได้</td></tr>
       <tr><td>LX Pantos</td><td>AMENDMENT OF MANIFEST ของ LX PANTOS (ไฟล์ละ B/L ใส่พร้อมกันได้)</td><td>ได้</td></tr>
       <tr><td>M-CORP</td><td>INBOUND CARGO MANIFEST ของ THE M CORP</td><td>–</td></tr>
       <tr><td>MAC-NELS</td><td>ATTACHED SHEETS ของ MAC-NELS SHIPPING</td><td>–</td></tr>
@@ -122,6 +135,7 @@ li { margin: 2px 0; }
       <tr><td>Planet</td><td>AMENDMENT ของ UNITEX (Planet)</td><td>ได้</td></tr>
       <tr><td>Quality</td><td>AMENDMENT ของ Quality</td><td>–</td></tr>
       <tr><td>Shipco</td><td>AMENDMENT ของ Shipco</td><td>–</td></tr>
+      <tr><td>Sinotrans</td><td>จดหมายแก้ MANIFEST ของ SINOTRANS (หน้าละ 1 B/L)</td><td>ได้</td></tr>
       <tr><td>Union World</td><td>AMENDMENT ของ UNION WORLD SHIPPING</td><td>ได้</td></tr>
     </tbody>
   </table></div>
@@ -190,6 +204,7 @@ li { margin: 2px 0; }
   <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;Forwarder&gt;.xlsx</span></div>
   <p class="note">Files are processed only in your browser — nothing is uploaded anywhere. No installation needed.</p>
   <nav class="toc">
+    <a href="#en-all">Check all files</a>
     <a href="#en-steps">How to use</a>
     <a href="#en-menu">Pick the right menu</a>
     <a href="#en-report">Reading the report</a>
@@ -197,11 +212,21 @@ li { margin: 2px 0; }
     <a href="#en-help">Troubleshooting</a>
   </nav>
 
+  <h2 id="en-all">Check all files — no need to pick a menu</h2>
+  <p>The top menu, <b>Check all files</b>, takes a MANIFEST and ENTER files from any forwarder, works out whose form each ENTER file is, and checks it with that forwarder's rules.</p>
+  <ol class="steps">
+    <li><div><b>Add one MANIFEST and any number of ENTER files.</b> ENTERs from several forwarders on the same vessel can go in together. SHED NO. works as in the normal menus.</div></li>
+    <li><div><b>Click “ตรวจสอบ” (Check).</b> The page reads each ENTER with every forwarder's checker (about 5–20 seconds) and picks the one that recognises the form and matches the most B/L numbers in the MANIFEST. When several forwarders share a form (e.g. the INBOUND CARGO MANIFEST of CMS / Eastern Air / M-CORP / Penanshin), the forwarder name in the document or file name decides.</div></li>
+    <li><div><b>Check the “เป็นของ” (Belongs to) table</b> to see which forwarder each file was matched to. If it is wrong, use that forwarder's own menu instead. A file marked <b>ไม่รู้จักฟอร์มนี้</b> (unknown form) has no menu that can read it yet.</div></li>
+    <li><div><b>Results come in one tab per forwarder.</b> Each tab is that forwarder's own page, so search, filter and download <code>EDI &lt;Forwarder&gt;.xlsx</code> work as usual.</div></li>
+  </ol>
+  <p class="note">A single ENTER file that bundles several forwarders' forms (such as the HAHM bundle) is split across several tabs. Each tab shows only the B/Ls that forwarder's form reader could read; the rest show yellow. Always re-check such files by hand.</p>
+
   <h2 id="en-steps">How to use</h2>
   <ol class="steps">
     <li><div><b>Choose the forwarder in the left menu</b> that matches whoever sent the ENTER. You can type in the search box. On a phone, tap ☰ to open the menu.</div></li>
     <li><div><b>Add the files.</b> Drag the MANIFEST and ENTER in together, or click the box to pick them.
-      <br><span class="note">File names don't matter — the page sorts them (.xls/.xlsx = MANIFEST, .pdf = ENTER). Several ENTER files for the same vessel can go in at once. Able, LX Pantos, Planet and Union World also accept a PDF “CARGO MANIFEST” as the MANIFEST.</span></div></li>
+      <br><span class="note">File names don't matter — the page sorts them (.xls/.xlsx = MANIFEST, .pdf = ENTER). Several ENTER files for the same vessel can go in at once. Able, Handle Inter, LX Pantos, Planet, Sinotrans and Union World also accept a PDF “CARGO MANIFEST” as the MANIFEST.</span></div></li>
     <li><div><b>Enter the SHED NO. (optional)</b>, e.g. <code>0141</code>. Every B/L must match it, except cargo for LAOS. Leave it blank if you don't know it.</div></li>
     <li><div><b>Click “ตรวจสอบ” (Check).</b> The button becomes active once both a MANIFEST and an ENTER have been added.</div></li>
     <li><div><b>Review the result on screen.</b> Search by B/L, consignee or container, and tick “แสดงเฉพาะที่ไม่ตรง” (show mismatches only) to see just the rows that need fixing.</div></li>
@@ -220,7 +245,9 @@ li { margin: 2px 0; }
       <tr><td>CMS</td><td>CMS AMENDMENT</td><td>–</td></tr>
       <tr><td>DSV</td><td>DSV AMENDMENT OF MANIFEST</td><td>–</td></tr>
       <tr><td>Eastern Air</td><td>Eastern Air INBOUND CARGO MANIFEST</td><td>–</td></tr>
+      <tr><td>Freight Links</td><td>Freight Links IMPORT CARGO MANIFEST</td><td>–</td></tr>
       <tr><td>Gateway</td><td>Gateway ENTER</td><td>–</td></tr>
+      <tr><td>Handle Inter</td><td>H.I.T. INTERCON / Handle Inter AMENDMENT</td><td>Yes</td></tr>
       <tr><td>LX Pantos</td><td>LX PANTOS AMENDMENT OF MANIFEST (one file per B/L, add them together)</td><td>Yes</td></tr>
       <tr><td>M-CORP</td><td>THE M CORP INBOUND CARGO MANIFEST</td><td>–</td></tr>
       <tr><td>MAC-NELS</td><td>MAC-NELS SHIPPING ATTACHED SHEETS</td><td>–</td></tr>
@@ -228,6 +255,7 @@ li { margin: 2px 0; }
       <tr><td>Planet</td><td>UNITEX (Planet) AMENDMENT</td><td>Yes</td></tr>
       <tr><td>Quality</td><td>Quality AMENDMENT</td><td>–</td></tr>
       <tr><td>Shipco</td><td>Shipco AMENDMENT</td><td>–</td></tr>
+      <tr><td>Sinotrans</td><td>SINOTRANS manifest correction letter (one B/L per page)</td><td>Yes</td></tr>
       <tr><td>Union World</td><td>UNION WORLD SHIPPING AMENDMENT</td><td>Yes</td></tr>
     </tbody>
   </table></div>

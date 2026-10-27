@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check all files</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1f3864; --navy-soft: #d9e1f2; --bg: #f3f5f9; --card: #ffffff;
+    --text: #1d2433; --muted: #5b6474; --line: #d5dae3;
+    --red: #c00000; --red-bg: #fdd7d7; --green: #006100; --green-bg: #c6efce; --yellow: #fff2cc;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Sarabun", Tahoma, sans-serif; background: #fff; color: var(--text); }
+  main { padding: 18px 20px 28px; }
+  h1 { margin: 0 0 4px; font-size: 22px; color: var(--navy); }
+  .sub { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-bottom: 18px; }
+  .top { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
+  @media (max-width: 720px) { .top { grid-template-columns: 1fr; } }
+  label.t { display: block; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .drop { border: 2px dashed #9aa8c3; border-radius: 8px; padding: 22px 16px; text-align: center; cursor: pointer; background: #fafbfd; transition: .15s; }
+  .drop.over { background: var(--navy-soft); border-color: var(--navy); }
+  .drop b { color: var(--navy); }
+  button { font: inherit; font-weight: 600; font-size: 16px; border: 0; border-radius: 8px; padding: 12px 22px; cursor: pointer; background: var(--navy); color: #fff; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  button.ghost { background: #fff; color: var(--navy); border: 1px solid var(--navy); }
+  .btns { display: flex; gap: 10px; }
+  .files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .file { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 6px 5px 12px; font-size: 14px; }
+  .file .x { cursor: pointer; border: 0; background: #eef0f5; color: var(--muted); border-radius: 50%; width: 22px; height: 22px; padding: 0; font-size: 13px; line-height: 22px; }
+  .opt { margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .opt input { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; width: 110px; }
+  .rules { font-size: 14px; color: var(--muted); margin: 14px 0 0; line-height: 1.7; }
+  .msg { color: var(--red); font-weight: 600; margin-top: 10px; white-space: pre-line; }
+  .prog { margin-top: 12px; font-size: 14px; color: var(--navy); font-weight: 600; }
+  .bar { height: 6px; background: var(--navy-soft); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--navy); transition: width .2s; }
+  table.map { border-collapse: collapse; width: 100%; font-size: 14px; margin-bottom: 14px; }
+  table.map th { background: var(--navy); color: #fff; text-align: left; padding: 7px 10px; }
+  table.map td { border-top: 1px solid var(--line); padding: 7px 10px; vertical-align: top; }
+  .tag { display: inline-block; font-weight: 700; padding: 1px 10px; border-radius: 999px; font-size: 13px; }
+  .tag.ok { background: var(--green-bg); color: var(--green); }
+  .tag.no { background: var(--red-bg); color: var(--red); }
+  .tag.man { background: var(--navy-soft); color: var(--navy); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid var(--navy); }
+  .tabs button { border-radius: 8px 8px 0 0; padding: 8px 16px; font-size: 15px; background: var(--navy-soft); color: var(--navy); }
+  .tabs button.on { background: var(--navy); color: #fff; }
+  .tabs button small { font-weight: 400; opacity: .85; }
+  iframe.res { width: 100%; border: 0; display: block; min-height: 400px; }
+  iframe.probe { position: absolute; width: 1200px; height: 800px; left: -10000px; top: 0; border: 0; visibility: hidden; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Check all files</h1>
+  <p class="sub">ใส่ MANIFEST และ ENTER ของ Forwarder ไหนก็ได้ ระบบหาให้เองว่าเป็นฟอร์มของใคร แล้วตรวจด้วยกฎของเจ้านั้น</p>
+
+  <section class="card">
+    <div class="top">
+      <div>
+        <label class="t">ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF "CARGO MANIFEST") และ ENTER (.pdf) ของ Forwarder ไหนก็ได้ — หลายไฟล์ หลายเจ้าพร้อมกันได้</label>
+        <div class="drop" id="drop"><span>ลากไฟล์มาวางพร้อมกัน หรือ <b>คลิกเพื่อเลือกไฟล์</b></span></div>
+        <input type="file" id="file" accept=".xls,.xlsx,.pdf" multiple class="hidden">
+        <div class="files" id="files"></div>
+        <div class="opt"><span>SHED NO. ที่แจ้ง (ถ้ามี):</span><input id="shed" placeholder="เช่น 0141" inputmode="numeric"><span>— ทุก B/L ต้องตรงเลขนี้ ยกเว้น LAOS</span></div>
+      </div>
+      <div class="btns"><button id="run" disabled>ตรวจสอบ</button><button id="clear" class="ghost" title="ล้างไฟล์และผลลัพธ์ทั้งหมด เริ่มใหม่">ลบไฟล์</button></div>
+    </div>
+    <p class="rules">
+      <b>วิธีทำงาน:</b> ลองอ่าน ENTER แต่ละไฟล์ด้วยตัวตรวจของทุก Forwarder แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด ·
+      ENTER หลายเจ้าในงานเดียวกัน แยกผลเป็นแท็บละเจ้า แต่ละแท็บดาวน์โหลด <b>EDI &lt;ชื่อเจ้า&gt;.xlsx</b> ได้ ·
+      MANIFEST ใส่ไฟล์เดียว (ไฟล์ CNTRS ไม่นำมาเทียบ) · ไฟล์ถูกประมวลผลในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด
+    </p>
+    <div class="prog hidden" id="prog"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
+    <div class="msg" id="msg"></div>
+  </section>
+
+  <section class="card hidden" id="result">
+    <table class="map"><thead><tr><th>ไฟล์</th><th>เป็นของ</th><th>B/L ที่อ่านได้ / ตรงกับ MANIFEST</th></tr></thead><tbody id="map"></tbody></table>
+    <div class="tabs" id="tabs"></div>
+    <div id="panes"></div>
+  </section>
+</main>
+<div id="probes"></div>
+<script>
+// เมนูที่ตรวจได้ (ตรงกับโฟลเดอร์ tools/<id>/) — เพิ่มเครื่องมือใหม่: เพิ่มที่นี่ด้วย
+// hint = ชื่อที่มักพิมพ์อยู่ในเอกสาร/ชื่อไฟล์ ใช้ตัดสินเมื่อตัวตรวจสองเจ้าอ่านได้เท่ากัน (เช่น CMS กับ Eastern Air ใช้ฟอร์มเดียวกัน)
+const TOOLS = [
+  { id: "able", name: "Able", hint: /\bABLE\b/i },
+  { id: "agn", name: "AGN", hint: /\bAGN\b/i },
+  { id: "cargoport", name: "Cargoport", hint: /CARGO\s*PORT/i },
+  { id: "cms", name: "CMS", hint: /\bCMS\b|C\.M\.S/i },
+  { id: "dsv", name: "DSV", hint: /\bDSV\b/i },
+  { id: "eastern-air", name: "Eastern Air", hint: /EASTERN\s*AIR/i },
+  { id: "freight-links", name: "Freight Links", hint: /FREIGHT\s*LINKS?/i },
+  { id: "gateway", name: "Gateway", hint: /GATEWAY/i },
+  { id: "handle-inter", name: "Handle Inter", hint: /HANDLE|H\.?\s*I\.?\s*T\.?\s*INTERCON/i },
+  { id: "lx-pantos", name: "LX Pantos", hint: /PANTOS|\bLX\b/i },
+  { id: "m-corp", name: "M-CORP", hint: /\bM[\s.-]*CORP/i },
+  { id: "mac-nels", name: "MAC-NELS", hint: /MAC[\s-]*NELS/i },
+  { id: "penanshin", name: "Penanshin", hint: /PENANSHIN/i },
+  { id: "planet", name: "Planet", hint: /PLANET/i },
+  { id: "quality", name: "Quality", hint: /QUALITY/i },
+  { id: "shipco", name: "Shipco", hint: /SHIPCO/i },
+  { id: "sinotrans", name: "Sinotrans", hint: /SINOTRANS/i },
+  { id: "union-world", name: "Union World", hint: /UNION\s*WORLD/i },
+];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let files = [];
+
+function renderFiles() {
+  $("files").innerHTML = files.map((f, i) =>
+    `<span class="file">${esc(f.name)}<button class="x" data-i="${i}" title="เอาออก">×</button></span>`).join("");
+  $("run").disabled = !(files.some(f => /\.xlsx?$/i.test(f.name)) || files.filter(f => /\.pdf$/i.test(f.name)).length > 1) || !files.some(f => /\.pdf$/i.test(f.name));
+}
+function addFiles(list) {
+  for (const f of list) if (!files.some(x => x.name === f.name && x.size === f.size)) files.push(f);
+  renderFiles();
+}
+function progress(done, total, txt) {
+  $("prog").classList.remove("hidden");
+  $("progTxt").textContent = txt;
+  $("progBar").style.width = Math.round(done / total * 100) + "%";
+}
+
+// โหลดหน้าเครื่องมือในกรอบ แล้วรอจน addFiles/run พร้อม (สคริปต์ CDN โหลดครบ)
+function loadTool(frame, id) {
+  return new Promise((ok, fail) => {
+    const t = setTimeout(() => fail(new Error("โหลดไม่ทัน: " + id)), 60000);
+    frame.onload = () => {
+      const w = frame.contentWindow;
+      if (typeof w.addFiles === "function" && typeof w.run === "function") { clearTimeout(t); ok(w); }
+      else { clearTimeout(t); fail(new Error("เปิดเครื่องมือไม่ได้: " + id)); }
+    };
+    frame.src = `../${id}/index.html?all=${Date.now()}`;
+  });
+}
+
+// ให้คะแนน ENTER แต่ละไฟล์ด้วยตัวตรวจของเครื่องมือนี้ (ทำในหน้าของเครื่องมือเอง ใช้ core.js ของเจ้านั้น)
+const PROBE = `(() => {
+  const mf = files.filter(f => f.kind === "MANIFEST").pop();
+  let MAN = {}, blRe;
+  if (mf) { try { const p = C.parseManifest(mf.rows); MAN = p.MAN || {}; blRe = p.blRe; } catch (e) {} }
+  const det = Object.keys(C).find(k => /^is/.test(k) && k !== "isManifestPdf");
+  return files.map(f => {
+    const o = { name: f.name, size: f.size, kind: f.kind, det: null, ent: 0, hit: 0, hits: [], text: "" };
+    if (f.kind !== "ENTER" || !f.pages) return o;
+    try { o.det = det ? !!C[det](f.pages) : null; } catch (e) { o.det = false; }
+    try { const r = C.parseEnter(f.pages, blRe) || {}; const ks = Object.keys(r.ENT || {}); o.ent = ks.length; o.hits = ks.filter(k => k in MAN); o.hit = o.hits.length; } catch (e) {}
+    try { o.text = f.pages.map(pg => (pg.items || []).map(i => i.t).join(" ")).join(" ").slice(0, 20000); } catch (e) {}
+    return o;
+  });
+})()`;
+
+async function probeAll(list) {
+  const out = {};
+  let done = 0;
+  const queue = [...TOOLS];
+  const worker = async () => {
+    const frame = document.createElement("iframe");
+    frame.className = "probe";
+    $("probes").appendChild(frame);
+    while (queue.length) {
+      const t = queue.shift();
+      try {
+        const w = await loadTool(frame, t.id);
+        await w.addFiles(list);
+        out[t.id] = w.eval(PROBE);
+      } catch (e) { console.warn(t.id, e); out[t.id] = []; }
+      progress(++done, TOOLS.length, `กำลังลองอ่านด้วยตัวตรวจทุกเจ้า… ${done}/${TOOLS.length} (${t.name})`);
+    }
+    frame.remove();
+  };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  return out;
+}
+
+// เลือกเจ้าที่ดีที่สุดของแต่ละไฟล์: รู้จักฟอร์ม > อ่าน B/L ตรง MANIFEST ได้มาก > อ่าน B/L ได้มาก > ชื่อเจ้าอยู่ในเอกสาร
+function choose(probe) {
+  const pick = {}, man = new Set();
+  for (const f of files) {
+    if (!/\.pdf$/i.test(f.name)) continue;
+    const key = f.name + "|" + f.size;
+    const cands = TOOLS.map(t => ({ t, o: (probe[t.id] || []).find(o => o.name === f.name && o.size === f.size) })).filter(c => c.o);
+    // PDF CARGO MANIFEST: เครื่องมือที่รับ MANIFEST แบบ PDF ได้จะแยกให้เอง (เครื่องมืออื่นนับเป็น ENTER)
+    if (cands.some(c => c.o.kind === "MANIFEST")) { man.add(key); continue; }
+    const score = c => [c.o.det === true ? 2 : c.o.det === null ? 1 : 0, c.o.hit, c.o.ent,
+      (c.t.hint.test(f.name) ? 2 : 0) + (c.t.hint.test(c.o.text) ? 1 : 0)];
+    const ok = cands.filter(c => c.o.kind === "ENTER" && c.o.ent > 0 && c.o.det !== false);
+    ok.sort((a, b) => { const x = score(a), y = score(b); for (let i = 0; i < x.length; i++) if (x[i] !== y[i]) return y[i] - x[i]; return 0; });
+    // ไฟล์รวมหลายเจ้า (เช่น ENTER ชุดรวมของ HAHM): เพิ่มเจ้าถัดไปที่รู้จักฟอร์มและอ่าน B/L ใหม่ที่เจ้าก่อนหน้ายังไม่ได้อ่านอย่างน้อย 2 B/L
+    const got = [], seen = new Set();
+    for (const c of ok) {
+      const fresh = c.o.hits.filter(b => !seen.has(b));
+      if (got.length && !(c.o.det === true && fresh.length >= 2)) continue;
+      got.push({ tool: c.t, ent: c.o.ent, hit: c.o.hit, fresh: fresh.length });
+      c.o.hits.forEach(b => seen.add(b));
+    }
+    pick[key] = got;
+  }
+  return { pick, man };
+}
+
+async function run() {
+  $("msg").textContent = "";
+  $("result").classList.add("hidden");
+  $("run").disabled = true;
+  try {
+    const xls = files.filter(f => /\.xlsx?$/i.test(f.name) && !/cntrs?/i.test(f.name));
+    if (xls.length > 1) { $("msg").textContent = "ใส่ MANIFEST ได้ไฟล์เดียว — พบ: " + xls.map(f => f.name).join(", "); return; }
+    const list = files.filter(f => !/cntrs?/i.test(f.name));
+    const probe = await probeAll(list);
+    const { pick, man } = choose(probe);
+    const manifest = list.filter(f => /\.xlsx?$/i.test(f.name) || man.has(f.name + "|" + f.size));
+    if (!manifest.length) { $("msg").textContent = "ไม่พบ MANIFEST — ใส่ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF CARGO MANIFEST) ของสายเรือด้วย"; return; }
+
+    // จับกลุ่ม ENTER ตามเจ้า
+    const groups = new Map();
+    const rows = [];
+    for (const f of list) {
+      const key = f.name + "|" + f.size;
+      if (manifest.includes(f)) { rows.push(`<tr><td>${esc(f.name)}</td><td><span class="tag man">MANIFEST</span></td><td>-</td></tr>`); continue; }
+      const p = pick[key];
+      if (!p.length) { rows.push(`<tr><td>${esc(f.name)}</td><td><span class="tag no">ไม่รู้จักฟอร์มนี้</span></td><td>ไม่มีตัวตรวจของเจ้าไหนอ่านได้ — ตรวจด้วยคน หรือเพิ่มเมนูของเจ้านี้</td></tr>`); continue; }
+      rows.push(`<tr><td>${esc(f.name)}${p.length > 1 ? "<br><small>ไฟล์รวมหลายเจ้า — แต่ละแท็บแสดงเฉพาะ B/L ที่ฟอร์มของเจ้านั้นอ่านได้ ที่เหลือขึ้นสีเหลือง ตรวจซ้ำด้วยคน</small>" : ""}</td>` +
+        `<td>${p.map(x => `<span class="tag ok">${esc(x.tool.name)}</span>`).join(" ")}</td><td>${p.map(x => `${esc(x.tool.name)}: ${x.ent} B/L / ตรง ${x.hit}`).join("<br>")}</td></tr>`);
+      for (const x of p) {
+        if (!groups.has(x.tool.id)) groups.set(x.tool.id, { tool: x.tool, files: [] });
+        groups.get(x.tool.id).files.push(f);
+      }
+    }
+    $("map").innerHTML = rows.join("");
+    $("tabs").innerHTML = ""; $("panes").innerHTML = "";
+    $("result").classList.remove("hidden");
+    if (!groups.size) { $("msg").textContent = "ไม่พบ ENTER ที่ตรวจได้"; $("prog").classList.add("hidden"); return; }
+
+    // แสดงผลด้วยหน้าของเจ้านั้น (ค้นหา/กรอง/ดาวน์โหลด EDI <ชื่อเจ้า>.xlsx ได้ตามปกติ)
+    let n = 0;
+    for (const g of groups.values()) {
+      progress(n, groups.size, `กำลังตรวจด้วยกฎของ ${g.tool.name}…`);
+      const tab = document.createElement("button");
+      tab.innerHTML = `${esc(g.tool.name)} <small>(${g.files.length} ไฟล์)</small>`;
+      const frame = document.createElement("iframe");
+      frame.className = "res";
+      const pane = document.createElement("div");
+      pane.appendChild(frame);
+      $("tabs").appendChild(tab); $("panes").appendChild(pane);
+      tab.onclick = () => {
+        [...$("tabs").children].forEach(b => b.classList.toggle("on", b === tab));
+        [...$("panes").children].forEach(p => p.classList.toggle("hidden", p !== pane));
+        fit(frame);
+      };
+      if (n) pane.classList.add("hidden"); else tab.classList.add("on");
+      const w = await loadTool(frame, g.tool.id);
+      w.document.getElementById("shed").value = $("shed").value;
+      await w.addFiles([...manifest, ...g.files]);
+      w.run();
+      new w.ResizeObserver(() => fit(frame)).observe(w.document.body);
+      fit(frame);
+      n++;
+    }
+    progress(1, 1, `ตรวจเสร็จ ${groups.size} เจ้า`);
+  } catch (err) {
+    $("msg").textContent = "เกิดข้อผิดพลาด: " + err.message;
+    console.error(err);
+  } finally {
+    renderFiles();
+  }
+}
+function fit(frame) {
+  try { const h = frame.contentDocument.documentElement.scrollHeight; if (h) frame.style.height = h + "px"; } catch (e) {}
+}
+
+const drop = $("drop");
+drop.onclick = () => $("file").click();
+$("file").onchange = e => { addFiles([...e.target.files]); e.target.value = ""; };
+drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); addFiles([...e.dataTransfer.files]); };
+$("files").onclick = e => { const i = e.target.dataset.i; if (i !== undefined) { files.splice(+i, 1); renderFiles(); } };
+$("run").onclick = run;
+$("clear").onclick = () => location.replace(location.pathname + "?clear=" + Date.now());
+</script>
+</body>
+</html>
