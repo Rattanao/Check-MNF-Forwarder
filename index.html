@@ -36,8 +36,12 @@ button { font: inherit; color: inherit; }
 .brand .name { display: grid; gap: 4px; }
 .brand .name b { color: var(--blue); font-size: 22px; font-weight: 700; letter-spacing: -.3px; white-space: nowrap; }
 .brand .name small { color: #222; font-size: 12px; letter-spacing: 3px; white-space: nowrap; }
-.top-right { margin-left: auto; align-self: stretch; display: flex; align-items: center; gap: 14px; background: var(--blue); padding: 0 26px; }
-.pill { color: #fff; padding: 6px 0; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.top-right { margin-left: auto; align-self: stretch; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 3px; background: var(--blue); padding: 0 26px; }
+.pill { color: #fff; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.guide { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #c9d4f0; white-space: nowrap; }
+.guide svg { width: 15px; height: 15px; stroke: #fff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.guide a { color: #fff; font-weight: 700; text-decoration: none; padding: 1px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,.5); }
+.guide a:hover, .guide a.active { background: #fff; color: var(--blue); }
 
 /* โครงหน้า */
 .layout { display: flex; height: calc(100% - var(--top-h) - var(--foot-h)); }
@@ -74,7 +78,10 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
   .side { position: fixed; top: var(--top-h); bottom: var(--foot-h); left: 0; z-index: 10; box-shadow: 2px 0 10px rgba(0,0,0,.18); }
   .main { padding: 16px; }
   .crumb { font-size: 20px; margin-bottom: 14px; }
-  .top-right, .brand .name small { display: none; }
+  .pill, .brand .name small, .guide svg { display: none; }
+  .top-right { padding: 0 10px; }
+  .guide { flex-direction: column; align-items: stretch; gap: 3px; font-size: 12px; }
+  .guide a { text-align: center; }
   :root { --foot-h: 58px; }
   .foot { font-size: 13.5px; white-space: normal; line-height: 1.3; }
 }
@@ -103,6 +110,9 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
   </div>
   <div class="top-right">
     <span class="pill">Processed in your browser · No files are uploaded</span>
+    <div class="guide"><svg viewBox="0 0 24 24" id="guideIcon"></svg>
+      <a href="#guide" data-lang="th">คู่มือ (ไทย)</a><a href="#guide" data-lang="en">User Guide (English)</a>
+    </div>
   </div>
 </header>
 
@@ -159,20 +169,29 @@ const GROUPS = [
     { id: "sinotrans", title: "Check EDI Sinotrans", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (จดหมายแก้ MANIFEST ของ SINOTRANS) → EDI.xlsx", src: "tools/sinotrans/index.html", icon: "check" },
     { id: "union-world", title: "Check EDI Union World", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Union World) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
   ]},
-  { name: "คู่มือ · Guide", tools: [
+  { name: "คู่มือ · Guide", hidden: true, tools: [
     { id: "guide", title: "คู่มือการใช้งาน / User Guide", desc: "วิธีใช้ อ่านรายงาน และแก้ปัญหา · เลือกภาษาไทย หรือ English ได้ที่มุมขวาบน", src: "tools/guide.html", icon: "book" }
   ]}
 ];
 const TOOLS = GROUPS.flatMap(g => g.tools.map(t => ({ ...t, group: g.name })));
 const $ = id => document.getElementById(id);
 
-$("menu").innerHTML = GROUPS.map(g => `
+$("menu").innerHTML = GROUPS.filter(g => !g.hidden).map(g => `
   <div class="group">
     <button class="group-head">${g.name}<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15l7-7 7 7"/></svg></button>
     <div class="items">${g.tools.map(t =>
       `<a class="item" href="#${t.id}" data-id="${t.id}"><svg viewBox="0 0 24 24">${ICON[t.icon]}</svg>${t.title}</a>`).join("")}
     </div>
   </div>`).join("");
+
+$("guideIcon").innerHTML = ICON.book;
+// ลิงก์คู่มือใต้ "No files are uploaded": เลือกภาษาแล้วเปิดคู่มือ (คู่มือจำภาษาไว้ใน localStorage "guide-lang")
+document.querySelectorAll(".guide a").forEach(a => a.addEventListener("click", () => {
+  try { localStorage.setItem("guide-lang", a.dataset.lang); } catch (e) {}
+  // คู่มือและหน้า Check all files ที่เปิดอยู่เปลี่ยนภาษาตาม
+  document.querySelectorAll("#card iframe").forEach(f => { try { f.contentWindow.setGuideLang && f.contentWindow.setGuideLang(a.dataset.lang); } catch (e) {} });
+  setTimeout(show);
+}));
 
 document.querySelectorAll(".group-head").forEach(b =>
   b.addEventListener("click", () => b.parentElement.classList.toggle("closed")));
@@ -183,6 +202,8 @@ function show() {
   $("crumb").innerHTML = `${t.group} › ${t.title}<small>${t.desc}</small>`;
   document.title = t.title + " · Check MNF Forwarder";
   document.querySelectorAll(".item").forEach(a => a.classList.toggle("active", a.dataset.id === t.id));
+  let gl = "th"; try { gl = localStorage.getItem("guide-lang") === "en" ? "en" : "th"; } catch (e) {}
+  document.querySelectorAll(".guide a").forEach(a => a.classList.toggle("active", t.id === "guide" && a.dataset.lang === gl));
   let frame = document.querySelector(`iframe[data-id="${t.id}"]`);
   if (!frame) {
     frame = document.createElement("iframe");

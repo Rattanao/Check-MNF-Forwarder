@@ -331,6 +331,7 @@ li { margin: 2px 0; }
     try { localStorage.setItem("guide-lang", lang); } catch (e) {}
   }
   btns.forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  window.setGuideLang = setLang;   // ลิงก์คู่มือบนแถบบนของเว็บรวมเรียกใช้
   let lang = new URLSearchParams(location.search).get("lang");
   if (!lang) { try { lang = localStorage.getItem("guide-lang"); } catch (e) {} }
   setLang(lang === "en" ? "en" : "th");

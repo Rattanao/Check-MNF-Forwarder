@@ -52,35 +52,38 @@
   iframe.res { width: 100%; border: 0; display: block; min-height: 400px; }
   iframe.probe { position: absolute; width: 1200px; height: 800px; left: -10000px; top: 0; border: 0; visibility: hidden; }
   .hidden { display: none !important; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .seg { display: inline-flex; border: 1px solid var(--navy); border-radius: 999px; overflow: hidden; }
+  .seg button { border-radius: 0; padding: 5px 14px; font-size: 14px; background: #fff; color: var(--navy); }
+  .seg button[aria-pressed="true"] { background: var(--navy); color: #fff; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Check all files</h1>
-  <p class="sub">ใส่ MANIFEST และ ENTER ของ Forwarder ไหนก็ได้ ระบบหาให้เองว่าเป็นฟอร์มของใคร แล้วตรวจด้วยกฎของเจ้านั้น</p>
+  <div class="head">
+    <div><h1>Check all files</h1>
+    <p class="sub" data-i="sub"></p></div>
+    <div class="seg" role="group" aria-label="Language / ภาษา"><button type="button" data-lang="th">ไทย</button><button type="button" data-lang="en">English</button></div>
+  </div>
 
   <section class="card">
     <div class="top">
       <div>
-        <label class="t">ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF "CARGO MANIFEST") และ ENTER (.pdf) ของ Forwarder ไหนก็ได้ — หลายไฟล์ หลายเจ้าพร้อมกันได้</label>
-        <div class="drop" id="drop"><span>ลากไฟล์มาวางพร้อมกัน หรือ <b>คลิกเพื่อเลือกไฟล์</b></span></div>
+        <label class="t" data-i="label"></label>
+        <div class="drop" id="drop"><span data-i="drop"></span></div>
         <input type="file" id="file" accept=".xls,.xlsx,.pdf" multiple class="hidden">
         <div class="files" id="files"></div>
-        <div class="opt"><span>SHED NO. ที่แจ้ง (ถ้ามี):</span><input id="shed" placeholder="เช่น 0141" inputmode="numeric"><span>— ทุก B/L ต้องตรงเลขนี้ ยกเว้น LAOS</span></div>
+        <div class="opt"><span data-i="shed"></span><input id="shed" inputmode="numeric"><span data-i="shedNote"></span></div>
       </div>
-      <div class="btns"><button id="run" disabled>ตรวจสอบ</button><button id="clear" class="ghost" title="ล้างไฟล์และผลลัพธ์ทั้งหมด เริ่มใหม่">ลบไฟล์</button></div>
+      <div class="btns"><button id="run" disabled data-i="run"></button><button id="clear" class="ghost" data-i="clear"></button></div>
     </div>
-    <p class="rules">
-      <b>วิธีทำงาน:</b> ลองอ่าน ENTER แต่ละไฟล์ด้วยตัวตรวจของทุก Forwarder แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด ·
-      ENTER หลายเจ้าในงานเดียวกัน แยกผลเป็นแท็บละเจ้า แต่ละแท็บดาวน์โหลด <b>EDI &lt;ชื่อเจ้า&gt;.xlsx</b> ได้ ·
-      MANIFEST ใส่ไฟล์เดียว (ไฟล์ CNTRS ไม่นำมาเทียบ) · ไฟล์ถูกประมวลผลในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด
-    </p>
+    <p class="rules" data-i="rules"></p>
     <div class="prog hidden" id="prog"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
     <div class="msg" id="msg"></div>
   </section>
 
   <section class="card hidden" id="result">
-    <table class="map"><thead><tr><th>ไฟล์</th><th>เป็นของ</th><th>B/L ที่อ่านได้ / ตรงกับ MANIFEST</th></tr></thead><tbody id="map"></tbody></table>
+    <table class="map"><thead><tr><th data-i="thFile"></th><th data-i="thOwner"></th><th data-i="thBl"></th></tr></thead><tbody id="map"></tbody></table>
     <div class="tabs" id="tabs"></div>
     <div id="panes"></div>
   </section>
@@ -109,13 +112,67 @@ const TOOLS = [
   { id: "sinotrans", name: "Sinotrans", hint: /SINOTRANS/i },
   { id: "union-world", name: "Union World", hint: /UNION\s*WORLD/i },
 ];
+// ข้อความสองภาษา: ใช้ค่าภาษาเดียวกับคู่มือ (localStorage "guide-lang") · ?lang=en เปิดภาษาอังกฤษ
+// หน้าผลของแต่ละเจ้า (ในแท็บ) ยังเป็นภาษาไทยตามเครื่องมือต้นฉบับ
+const TEXT = {
+  th: {
+    sub: "ใส่ MANIFEST และ ENTER ของ Forwarder ไหนก็ได้ ระบบหาให้เองว่าเป็นฟอร์มของใคร แล้วตรวจด้วยกฎของเจ้านั้น",
+    label: 'ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF "CARGO MANIFEST") และ ENTER (.pdf) ของ Forwarder ไหนก็ได้ — หลายไฟล์ หลายเจ้าพร้อมกันได้',
+    drop: "ลากไฟล์มาวางพร้อมกัน หรือ <b>คลิกเพื่อเลือกไฟล์</b>",
+    shed: "SHED NO. ที่แจ้ง (ถ้ามี):", shedPh: "เช่น 0141", shedNote: "— ทุก B/L ต้องตรงเลขนี้ ยกเว้น LAOS",
+    run: "ตรวจสอบ", clear: "ลบไฟล์", clearTip: "ล้างไฟล์และผลลัพธ์ทั้งหมด เริ่มใหม่", remove: "เอาออก",
+    rules: "<b>วิธีทำงาน:</b> ลองอ่าน ENTER แต่ละไฟล์ด้วยตัวตรวจของทุก Forwarder แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด · " +
+      "ENTER หลายเจ้าในงานเดียวกัน แยกผลเป็นแท็บละเจ้า แต่ละแท็บดาวน์โหลด <b>EDI &lt;ชื่อเจ้า&gt;.xlsx</b> ได้ · " +
+      "MANIFEST ใส่ไฟล์เดียว (ไฟล์ CNTRS ไม่นำมาเทียบ) · ไฟล์ถูกประมวลผลในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด",
+    thFile: "ไฟล์", thOwner: "เป็นของ", thBl: "B/L ที่อ่านได้ / ตรงกับ MANIFEST",
+    probing: (d, n, name) => `กำลังลองอ่านด้วยตัวตรวจทุกเจ้า… ${d}/${n} (${name})`,
+    oneManifest: "ใส่ MANIFEST ได้ไฟล์เดียว — พบ: ",
+    noManifest: "ไม่พบ MANIFEST — ใส่ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF CARGO MANIFEST) ของสายเรือด้วย",
+    unknown: "ไม่รู้จักฟอร์มนี้", unknownNote: "ไม่มีตัวตรวจของเจ้าไหนอ่านได้ — ตรวจด้วยคน หรือเพิ่มเมนูของเจ้านี้",
+    bundle: "ไฟล์รวมหลายเจ้า — แต่ละแท็บแสดงเฉพาะ B/L ที่ฟอร์มของเจ้านั้นอ่านได้ ที่เหลือขึ้นสีเหลือง ตรวจซ้ำด้วยคน",
+    blHit: (e, h) => `${e} B/L / ตรง ${h}`, noEnter: "ไม่พบ ENTER ที่ตรวจได้",
+    checking: name => `กำลังตรวจด้วยกฎของ ${name}…`, nFiles: n => `${n} ไฟล์`, done: n => `ตรวจเสร็จ ${n} เจ้า`,
+    error: "เกิดข้อผิดพลาด: ", loadSlow: "โหลดไม่ทัน: ", loadFail: "เปิดเครื่องมือไม่ได้: "
+  },
+  en: {
+    sub: "Add a MANIFEST and ENTER files from any forwarder. The page works out whose form each ENTER is and checks it with that forwarder's rules.",
+    label: 'MANIFEST (.xls / .xlsx or PDF "CARGO MANIFEST") and ENTER files (.pdf) from any forwarder — several files and forwarders at once are fine',
+    drop: "Drop the files here together, or <b>click to choose files</b>",
+    shed: "SHED NO. given (optional):", shedPh: "e.g. 0141", shedNote: "— every B/L must match it, except LAOS",
+    run: "Check", clear: "Clear files", clearTip: "Remove all files and results and start again", remove: "Remove",
+    rules: "<b>How it works:</b> each ENTER file is read with every forwarder's checker, and the forwarder that recognises the form and matches the most B/L numbers in the MANIFEST is picked · " +
+      "ENTERs from several forwarders in one job get one result tab each; each tab downloads <b>EDI &lt;Forwarder&gt;.xlsx</b> · " +
+      "Add one MANIFEST only (CNTRS files are not compared) · Files are processed only in your browser — nothing is uploaded anywhere",
+    thFile: "File", thOwner: "Belongs to", thBl: "B/Ls read / matching MANIFEST",
+    probing: (d, n, name) => `Trying every forwarder's checker… ${d}/${n} (${name})`,
+    oneManifest: "Add only one MANIFEST — found: ",
+    noManifest: "No MANIFEST found — add the carrier's MANIFEST (.xls / .xlsx or PDF CARGO MANIFEST) too",
+    unknown: "Unknown form", unknownNote: "No forwarder's checker can read it — check it by hand, or add a menu for this forwarder",
+    bundle: "Bundle of several forwarders — each tab shows only the B/Ls its form reader could read; the rest show yellow. Re-check by hand.",
+    blHit: (e, h) => `${e} B/L / ${h} matching`, noEnter: "No ENTER that can be checked",
+    checking: name => `Checking with ${name}'s rules…`, nFiles: n => `${n} file${n > 1 ? "s" : ""}`, done: n => `Done — ${n} forwarder${n > 1 ? "s" : ""}`,
+    error: "Error: ", loadSlow: "Took too long to load: ", loadFail: "Could not open the tool: "
+  }
+};
+let lang = "th";
+const L = (k, ...a) => { const v = TEXT[lang][k]; return typeof v === "function" ? v(...a) : v; };
+function setLang(l) {
+  lang = l === "en" ? "en" : "th";
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i]").forEach(el => { el.innerHTML = L(el.dataset.i); });
+  document.getElementById("shed").placeholder = L("shedPh");
+  document.getElementById("clear").title = L("clearTip");
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  try { localStorage.setItem("guide-lang", lang); } catch (e) {}
+  if (typeof files !== "undefined") renderFiles();
+}
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 let files = [];
 
 function renderFiles() {
   $("files").innerHTML = files.map((f, i) =>
-    `<span class="file">${esc(f.name)}<button class="x" data-i="${i}" title="เอาออก">×</button></span>`).join("");
+    `<span class="file">${esc(f.name)}<button class="x" data-i="${i}" title="${L("remove")}">×</button></span>`).join("");
   $("run").disabled = !(files.some(f => /\.xlsx?$/i.test(f.name)) || files.filter(f => /\.pdf$/i.test(f.name)).length > 1) || !files.some(f => /\.pdf$/i.test(f.name));
 }
 function addFiles(list) {
@@ -131,11 +188,11 @@ function progress(done, total, txt) {
 // โหลดหน้าเครื่องมือในกรอบ แล้วรอจน addFiles/run พร้อม (สคริปต์ CDN โหลดครบ)
 function loadTool(frame, id) {
   return new Promise((ok, fail) => {
-    const t = setTimeout(() => fail(new Error("โหลดไม่ทัน: " + id)), 60000);
+    const t = setTimeout(() => fail(new Error(L("loadSlow") + id)), 60000);
     frame.onload = () => {
       const w = frame.contentWindow;
       if (typeof w.addFiles === "function" && typeof w.run === "function") { clearTimeout(t); ok(w); }
-      else { clearTimeout(t); fail(new Error("เปิดเครื่องมือไม่ได้: " + id)); }
+      else { clearTimeout(t); fail(new Error(L("loadFail") + id)); }
     };
     frame.src = `../${id}/index.html?all=${Date.now()}`;
   });
@@ -172,7 +229,7 @@ async function probeAll(list) {
         await w.addFiles(list);
         out[t.id] = w.eval(PROBE);
       } catch (e) { console.warn(t.id, e); out[t.id] = []; }
-      progress(++done, TOOLS.length, `กำลังลองอ่านด้วยตัวตรวจทุกเจ้า… ${done}/${TOOLS.length} (${t.name})`);
+      progress(++done, TOOLS.length, L("probing", done, TOOLS.length, t.name));
     }
     frame.remove();
   };
@@ -212,12 +269,12 @@ async function run() {
   $("run").disabled = true;
   try {
     const xls = files.filter(f => /\.xlsx?$/i.test(f.name) && !/cntrs?/i.test(f.name));
-    if (xls.length > 1) { $("msg").textContent = "ใส่ MANIFEST ได้ไฟล์เดียว — พบ: " + xls.map(f => f.name).join(", "); return; }
+    if (xls.length > 1) { $("msg").textContent = L("oneManifest") + xls.map(f => f.name).join(", "); return; }
     const list = files.filter(f => !/cntrs?/i.test(f.name));
     const probe = await probeAll(list);
     const { pick, man } = choose(probe);
     const manifest = list.filter(f => /\.xlsx?$/i.test(f.name) || man.has(f.name + "|" + f.size));
-    if (!manifest.length) { $("msg").textContent = "ไม่พบ MANIFEST — ใส่ไฟล์ MANIFEST (.xls / .xlsx หรือ PDF CARGO MANIFEST) ของสายเรือด้วย"; return; }
+    if (!manifest.length) { $("msg").textContent = L("noManifest"); return; }
 
     // จับกลุ่ม ENTER ตามเจ้า
     const groups = new Map();
@@ -226,9 +283,9 @@ async function run() {
       const key = f.name + "|" + f.size;
       if (manifest.includes(f)) { rows.push(`<tr><td>${esc(f.name)}</td><td><span class="tag man">MANIFEST</span></td><td>-</td></tr>`); continue; }
       const p = pick[key];
-      if (!p.length) { rows.push(`<tr><td>${esc(f.name)}</td><td><span class="tag no">ไม่รู้จักฟอร์มนี้</span></td><td>ไม่มีตัวตรวจของเจ้าไหนอ่านได้ — ตรวจด้วยคน หรือเพิ่มเมนูของเจ้านี้</td></tr>`); continue; }
-      rows.push(`<tr><td>${esc(f.name)}${p.length > 1 ? "<br><small>ไฟล์รวมหลายเจ้า — แต่ละแท็บแสดงเฉพาะ B/L ที่ฟอร์มของเจ้านั้นอ่านได้ ที่เหลือขึ้นสีเหลือง ตรวจซ้ำด้วยคน</small>" : ""}</td>` +
-        `<td>${p.map(x => `<span class="tag ok">${esc(x.tool.name)}</span>`).join(" ")}</td><td>${p.map(x => `${esc(x.tool.name)}: ${x.ent} B/L / ตรง ${x.hit}`).join("<br>")}</td></tr>`);
+      if (!p.length) { rows.push(`<tr><td>${esc(f.name)}</td><td><span class="tag no">${L("unknown")}</span></td><td>${L("unknownNote")}</td></tr>`); continue; }
+      rows.push(`<tr><td>${esc(f.name)}${p.length > 1 ? "<br><small>" + L("bundle") + "</small>" : ""}</td>` +
+        `<td>${p.map(x => `<span class="tag ok">${esc(x.tool.name)}</span>`).join(" ")}</td><td>${p.map(x => `${esc(x.tool.name)}: ${L("blHit", x.ent, x.hit)}`).join("<br>")}</td></tr>`);
       for (const x of p) {
         if (!groups.has(x.tool.id)) groups.set(x.tool.id, { tool: x.tool, files: [] });
         groups.get(x.tool.id).files.push(f);
@@ -237,14 +294,14 @@ async function run() {
     $("map").innerHTML = rows.join("");
     $("tabs").innerHTML = ""; $("panes").innerHTML = "";
     $("result").classList.remove("hidden");
-    if (!groups.size) { $("msg").textContent = "ไม่พบ ENTER ที่ตรวจได้"; $("prog").classList.add("hidden"); return; }
+    if (!groups.size) { $("msg").textContent = L("noEnter"); $("prog").classList.add("hidden"); return; }
 
     // แสดงผลด้วยหน้าของเจ้านั้น (ค้นหา/กรอง/ดาวน์โหลด EDI <ชื่อเจ้า>.xlsx ได้ตามปกติ)
     let n = 0;
     for (const g of groups.values()) {
-      progress(n, groups.size, `กำลังตรวจด้วยกฎของ ${g.tool.name}…`);
+      progress(n, groups.size, L("checking", g.tool.name));
       const tab = document.createElement("button");
-      tab.innerHTML = `${esc(g.tool.name)} <small>(${g.files.length} ไฟล์)</small>`;
+      tab.innerHTML = `${esc(g.tool.name)} <small>(${L("nFiles", g.files.length)})</small>`;
       const frame = document.createElement("iframe");
       frame.className = "res";
       const pane = document.createElement("div");
@@ -264,9 +321,9 @@ async function run() {
       fit(frame);
       n++;
     }
-    progress(1, 1, `ตรวจเสร็จ ${groups.size} เจ้า`);
+    progress(1, 1, L("done", groups.size));
   } catch (err) {
-    $("msg").textContent = "เกิดข้อผิดพลาด: " + err.message;
+    $("msg").textContent = L("error") + err.message;
     console.error(err);
   } finally {
     renderFiles();
@@ -285,6 +342,13 @@ drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); addFiles
 $("files").onclick = e => { const i = e.target.dataset.i; if (i !== undefined) { files.splice(+i, 1); renderFiles(); } };
 $("run").onclick = run;
 $("clear").onclick = () => location.replace(location.pathname + "?clear=" + Date.now());
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setLang(b.dataset.lang));
+window.setGuideLang = setLang;   // ลิงก์คู่มือบนแถบบนของเว็บรวมเปลี่ยนภาษาหน้านี้ด้วย
+{
+  let l = new URLSearchParams(location.search).get("lang");
+  if (!l) { try { l = localStorage.getItem("guide-lang"); } catch (e) {} }
+  setLang(l);
+}
 </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 18 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
 
-เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/ · คู่มือ (ไทย / English): https://rattanao.github.io/Check-MNF-Forwarder/#guide
+เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/ · คู่มือ (ไทย / English): ลิงก์ใต้ "No files are uploaded" มุมขวาบน หรือ https://rattanao.github.io/Check-MNF-Forwarder/#guide
 
 เมนูบนสุด **Check all files** (`tools/all/`) รับ MANIFEST / ENTER ของเจ้าไหนก็ได้ ลองอ่าน ENTER ด้วยตัวตรวจของทุกเจ้า เลือกเจ้าที่รู้จักฟอร์มและอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด แล้วแสดงผลด้วยหน้าของเจ้านั้น (เพิ่มเครื่องมือใหม่: เพิ่มใน `TOOLS` ของ `tools/all/index.html` ด้วย)
 
