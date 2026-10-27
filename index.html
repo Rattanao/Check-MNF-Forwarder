@@ -131,7 +131,8 @@ const ICON = {
   swap:  '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
   cut:   '<circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8 8.5L20 17M8 15.5L20 7"/>',
   temp:  '<path d="M10 14V5a2 2 0 014 0v9a4 4 0 11-4 0z"/><path d="M12 10v6"/>',
-  doc:   '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>'
+  doc:   '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  book:  '<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5M8 7h8M8 11h6"/>'
 };
 const GROUPS = [
   { name: "ตรวจสอบ EDI Forwarder", tools: [
@@ -150,6 +151,9 @@ const GROUPS = [
     { id: "quality",   title: "Check EDI Quality",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Quality) → EDI.xlsx", src: "tools/quality/index.html", icon: "check" },
     { id: "shipco",    title: "Check EDI Shipco",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Shipco) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" },
     { id: "union-world", title: "Check EDI Union World", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Union World) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
+  ]},
+  { name: "คู่มือ · Guide", tools: [
+    { id: "guide", title: "คู่มือการใช้งาน / User Guide", desc: "วิธีใช้ อ่านรายงาน และแก้ปัญหา · เลือกภาษาไทย หรือ English ได้ที่มุมขวาบน", src: "tools/guide.html", icon: "book" }
   ]}
 ];
 const TOOLS = GROUPS.flatMap(g => g.tools.map(t => ({ ...t, group: g.name })));

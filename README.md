@@ -2,7 +2,7 @@
 
 รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 15 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
 
-เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/
+เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/ · คู่มือ (ไทย / English): https://rattanao.github.io/Check-MNF-Forwarder/#guide
 
 | เมนู | ต้นฉบับ |
 |---|---|

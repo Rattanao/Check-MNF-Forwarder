@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คู่มือการใช้งาน · User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1f3f94; --blue-dark: #17306f; --red: #e2501f;
+  --text: #2b2b2b; --muted: #6b7680; --line: #d9dee3; --soft: #f4f6fb; --bg: #ffffff;
+  --c-red: #fdd7d7; --c-org: #fce4d6; --c-yel: #fff2cc; --c-grn: #c6efce;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Sarabun", Tahoma, sans-serif; font-size: 15.5px; line-height: 1.7; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 18px 20px 40px; }
+
+.langbar { position: sticky; top: 0; z-index: 2; background: var(--bg); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0 12px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.langbar .lbl { color: var(--muted); font-size: 14px; }
+.seg { display: inline-flex; border: 1.5px solid var(--blue); border-radius: 999px; overflow: hidden; }
+.seg button { font: inherit; font-weight: 600; font-size: 14px; border: 0; background: #fff; color: var(--blue); padding: 6px 18px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.seg button:focus-visible { outline: 3px solid var(--red); outline-offset: -3px; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.toc a { color: var(--blue); text-decoration: none; font-weight: 600; }
+.toc a:hover { text-decoration: underline; }
+
+article[hidden] { display: none; }
+h1 { color: var(--blue); font-size: 26px; margin: 0 0 6px; line-height: 1.3; }
+h2 { color: var(--blue-dark); font-size: 19px; margin: 30px 0 10px; padding-top: 6px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+h3 { font-size: 16px; margin: 16px 0 6px; }
+p { margin: 0 0 10px; }
+.lede { color: var(--muted); font-size: 16px; }
+code { background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; font-size: .92em; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 4px; font-weight: 600; font-size: 14px; }
+.flow span { border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; background: var(--soft); }
+.flow span.out { background: var(--blue); color: #fff; border-color: var(--blue); }
+.flow i { font-style: normal; color: var(--muted); }
+
+ol.steps { list-style: none; padding: 0; margin: 0; counter-reset: s; display: grid; gap: 12px; }
+ol.steps > li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 12px; }
+ol.steps > li::before { content: counter(s); width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+ol.steps b { color: var(--blue-dark); }
+.note { color: var(--muted); font-size: 14px; }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { background: var(--blue); color: #fff; text-align: left; padding: 7px 10px; font-weight: 600; white-space: nowrap; }
+td { padding: 7px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+td:first-child { white-space: nowrap; font-weight: 600; }
+
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 8px 0; }
+.legend div { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+.legend i { flex: none; width: 22px; height: 22px; border-radius: 4px; border: 1px solid #c9ced6; margin-top: 1px; }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+ul { margin: 0 0 10px; padding-left: 22px; }
+li { margin: 2px 0; }
+.alert { background: #fff6ec; border: 1px solid #f3c9a4; border-left: 4px solid var(--red); border-radius: 6px; padding: 10px 14px; margin-top: 26px; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 12px 16px 32px; }
+  h1 { font-size: 22px; }
+  .langbar .lbl { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="langbar">
+  <span class="lbl" data-th="เลือกภาษา" data-en="Language">เลือกภาษา</span>
+  <div class="seg" role="group" aria-label="Language / ภาษา">
+    <button type="button" data-lang="th" aria-pressed="true">ไทย</button>
+    <button type="button" data-lang="en" aria-pressed="false">English</button>
+  </div>
+</div>
+
+<!-- ======================= ภาษาไทย ======================= -->
+<article lang="th" id="art-th">
+  <h1>คู่มือการใช้งาน Check MNF Forwarder</h1>
+  <p class="lede">เวปนี้ใช้เทียบ MANIFEST ของสายเรือกับ ENTER ของ Forwarder แต่ละราย ได้ผลเป็นรายงาน Excel ใส่สี ช่องไหนไม่ตรงจะเห็นทันทีก่อนยื่นใบขนสินค้าขาเข้า</p>
+  <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;ชื่อ Forwarder&gt;.xlsx</span></div>
+  <p class="note">ไฟล์ประมวลผลในเบราว์เซอร์ของเครื่องคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด · ไม่ต้องติดตั้งโปรแกรม</p>
+  <nav class="toc">
+    <a href="#th-steps">ขั้นตอนการใช้งาน</a>
+    <a href="#th-menu">เลือกเมนูให้ตรงฟอร์ม</a>
+    <a href="#th-report">อ่านรายงาน</a>
+    <a href="#th-rules">กฎการเทียบ</a>
+    <a href="#th-help">ถ้าเจอปัญหา</a>
+  </nav>
+
+  <h2 id="th-steps">ขั้นตอนการใช้งาน</h2>
+  <ol class="steps">
+    <li><div><b>เลือก Forwarder จากเมนูด้านซ้าย</b> ให้ตรงกับผู้ส่ง ENTER ค้นหาจากช่อง “ค้นหาเครื่องมือ” ได้ บนมือถือกดปุ่ม ☰ เพื่อเปิดเมนู</div></li>
+    <li><div><b>ใส่ไฟล์</b> ลากไฟล์ MANIFEST และ ENTER มาวางพร้อมกัน หรือคลิกกรอบเพื่อเลือกไฟล์
+      <br><span class="note">ตั้งชื่อไฟล์อะไรก็ได้ เวปแยกให้เอง (.xls/.xlsx = MANIFEST, .pdf = ENTER) · ENTER หลายไฟล์ของเรือลำเดียวกันใส่พร้อมกันได้ · Able, LX Pantos, Planet, Union World รับ MANIFEST แบบ PDF “CARGO MANIFEST” ได้ด้วย</span></div></li>
+    <li><div><b>ใส่ SHED NO. (ถ้ามี)</b> เช่น <code>0141</code> ทุก B/L ต้องตรงเลขนี้ ยกเว้นสินค้าไป LAOS · ถ้าไม่รู้เว้นว่างได้</div></li>
+    <li><div><b>กดปุ่ม “ตรวจสอบ”</b> ปุ่มจะกดได้เมื่อใส่ไฟล์ครบทั้ง MANIFEST และ ENTER</div></li>
+    <li><div><b>ดูผลบนหน้าจอ</b> ค้นหา B/L / ผู้รับ / เลขตู้ ได้ และติ๊ก “แสดงเฉพาะที่ไม่ตรง” เพื่อดูเฉพาะแถวที่ต้องแก้</div></li>
+    <li><div><b>กด “ดาวน์โหลด EDI.xlsx”</b> ไฟล์จะลงโฟลเดอร์ <b>Downloads</b> ชื่อตาม Forwarder เช่น <code>EDI Union World.xlsx</code></div></li>
+    <li><div><b>เริ่มงานใหม่ กดปุ่ม “ลบไฟล์”</b> ข้างปุ่มตรวจสอบ เพื่อล้างไฟล์และผลเก่าทั้งหมด</div></li>
+  </ol>
+
+  <h2 id="th-menu">เลือกเมนูให้ตรงฟอร์ม ENTER</h2>
+  <p>แต่ละเมนูอ่านได้เฉพาะฟอร์ม ENTER ของ Forwarder นั้น ถ้าใส่ผิดฟอร์ม เวปจะแจ้งว่าไม่ใช่ฟอร์มที่รองรับ</p>
+  <div class="tbl"><table>
+    <thead><tr><th>เมนู</th><th>ฟอร์ม ENTER</th><th>MANIFEST แบบ PDF</th></tr></thead>
+    <tbody>
+      <tr><td>Able</td><td>ฟอร์มของ Able</td><td>ได้</td></tr>
+      <tr><td>AGN</td><td>AMENDMENT ของ AGN</td><td>–</td></tr>
+      <tr><td>Cargoport</td><td>ENTER ของ Cargoport</td><td>–</td></tr>
+      <tr><td>CMS</td><td>AMENDMENT ของ CMS</td><td>–</td></tr>
+      <tr><td>DSV</td><td>AMENDMENT OF MANIFEST ของ DSV</td><td>–</td></tr>
+      <tr><td>Eastern Air</td><td>INBOUND CARGO MANIFEST ของ Eastern Air</td><td>–</td></tr>
+      <tr><td>Gateway</td><td>ENTER ของ Gateway</td><td>–</td></tr>
+      <tr><td>LX Pantos</td><td>AMENDMENT OF MANIFEST ของ LX PANTOS (ไฟล์ละ B/L ใส่พร้อมกันได้)</td><td>ได้</td></tr>
+      <tr><td>M-CORP</td><td>INBOUND CARGO MANIFEST ของ THE M CORP</td><td>–</td></tr>
+      <tr><td>MAC-NELS</td><td>ATTACHED SHEETS ของ MAC-NELS SHIPPING</td><td>–</td></tr>
+      <tr><td>Penanshin</td><td>INBOUND CARGO MANIFEST ของ Penanshin</td><td>–</td></tr>
+      <tr><td>Planet</td><td>AMENDMENT ของ UNITEX (Planet)</td><td>ได้</td></tr>
+      <tr><td>Quality</td><td>AMENDMENT ของ Quality</td><td>–</td></tr>
+      <tr><td>Shipco</td><td>AMENDMENT ของ Shipco</td><td>–</td></tr>
+      <tr><td>Union World</td><td>AMENDMENT ของ UNION WORLD SHIPPING</td><td>ได้</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="th-report">อ่านรายงาน</h2>
+  <p>หนึ่งแถวต่อหนึ่ง B/L ช่องซ้ายสุดสรุปว่าแถวนั้นต้องดูอะไร ค่าของ ENTER และ MANIFEST วางคู่กันทุกหัวข้อ แถวสุดท้าย TOTAL เทียบยอดรวมกับยอดที่เอกสารระบุเอง</p>
+  <div class="legend">
+    <div><i style="background:#fff"></i><span><b>ขาว</b> — ไม่ผิด</span></div>
+    <div><i style="background:var(--c-grn)"></i><span><b>เขียว</b> — ผ่าน ไม่พบจุดผิด</span></div>
+    <div><i style="background:var(--c-red)"></i><span><b>แดง ⚠</b> — ไม่ตรงกัน ต้องแก้หรือยืนยันก่อนยื่น</span></div>
+    <div><i style="background:var(--c-org)"></i><span><b>ส้ม</b> — ต้องให้คนยืนยัน เช่น ตัดบรรทัดต่างกัน หรือ B/L TRANSIT ที่ MANIFEST แบบ PDF ไม่มีข้อมูล</span></div>
+    <div><i style="background:var(--c-yel)"></i><span><b>เหลือง</b> — ไม่มีเอกสาร ENTER ให้เทียบ</span></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>หัวข้อที่เทียบทุก B/L</h3>
+      <ul>
+        <li>CONSIGNEE และ TAX ID</li>
+        <li>CONTAINER NO. และ STATUS</li>
+        <li>จำนวนและชนิดหีบห่อ (PKG), G.W., MEAS.</li>
+        <li>MARKS และ DESCRIPTION</li>
+        <li>SHED NO., ประเทศปลายทาง, CARGO MOVEMENT</li>
+      </ul>
+    </div>
+    <div>
+      <h3>เตือนเสมอเมื่อพบ</h3>
+      <ul>
+        <li>DG (CLASS / UN)</li>
+        <li>REEFER TEMP</li>
+        <li>INTRANSIT / TRANSHIPMENT</li>
+        <li>B/L ที่มีใน ENTER แต่ไม่มีใน MANIFEST (วิกฤต)</li>
+        <li>ยอดรวมแถว TOTAL ไม่ตรงกับที่เอกสารระบุ</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="th-rules">กฎการเทียบที่ควรรู้</h2>
+  <ul>
+    <li><b>STATUS:</b> CY / CY-CY / FCL / ลากตู้ = <code>CY</code> · LCL / ขน = <code>LCL</code> · CFS / LCL-CFS / เปิดตู้ = <code>LCL/CFS</code></li>
+    <li><b>TRANSHIPMENT:</b> CARGO MOVEMENT ต้องเป็น <code>3-TRANSHIPMENT</code></li>
+    <li><b>MARKS / DESCRIPTION</b> เทียบแบบเข้ม ตัดเฉพาะช่องว่างและวรรคตอน</li>
+    <li>B/L ที่มีหลายตู้ ต้องตรงกับ MANIFEST ครบทุกตู้</li>
+    <li>ข้อความสีแดงที่ลูกค้าพิมพ์ทับ PDF ใช้กับ B/L ที่อยู่ใต้ข้อความ ถ้ามีคำว่า <code>ทุก BL</code> ใช้กับทุก B/L</li>
+    <li>SHED / ประเทศปลายทาง / CARGO MOVEMENT / TAX ID ถ้าถูกต้องตามกฎจะแสดง <code>-</code></li>
+  </ul>
+
+  <h2 id="th-help">ถ้าเจอปัญหา</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>อาการ</th><th>วิธีแก้</th></tr></thead>
+    <tbody>
+      <tr><td>ปุ่ม “ตรวจสอบ” กดไม่ได้</td><td>ยังใส่ไฟล์ไม่ครบ ต้องมีทั้ง MANIFEST และ ENTER</td></tr>
+      <tr><td>แจ้งว่าไม่ใช่ฟอร์มที่รองรับ</td><td>เลือกเมนูผิด Forwarder ให้เลือกเมนูที่ตรงกับฟอร์ม ENTER (ดูตารางด้านบน)</td></tr>
+      <tr><td>ฝั่ง ENTER ว่าง หรือเหลืองเยอะผิดปกติ</td><td>ENTER อาจเป็นฟอร์มใหม่ที่ยังไม่รองรับ หรือเป็นไฟล์สแกน ส่งไฟล์ให้ Rattana เพื่อเพิ่มฟอร์ม</td></tr>
+      <tr><td>หน้าเวปยังเป็นแบบเก่า</td><td>กด <code>Ctrl</code> + <code>F5</code> เพื่อโหลดหน้าใหม่</td></tr>
+      <tr><td>หาไฟล์ที่ดาวน์โหลดไม่เจอ</td><td>ดูในโฟลเดอร์ Downloads ชื่อไฟล์ขึ้นต้นด้วย <code>EDI</code> ตามด้วยชื่อ Forwarder</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="alert">รายงานนี้เป็นตัวช่วยตรวจเท่านั้น ก่อนยื่นใบขนต้องให้คนตรวจทุกช่องที่เป็นสีแดงหรือสีส้มเสมอ</div>
+</article>
+
+<!-- ======================= English ======================= -->
+<article lang="en" id="art-en" hidden>
+  <h1>Check MNF Forwarder — User Guide</h1>
+  <p class="lede">This site compares the shipping line's MANIFEST with each forwarder's ENTER document and produces a colour-coded Excel report, so every mismatch is visible before you file the import customs declaration.</p>
+  <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;Forwarder&gt;.xlsx</span></div>
+  <p class="note">Files are processed only in your browser — nothing is uploaded anywhere. No installation needed.</p>
+  <nav class="toc">
+    <a href="#en-steps">How to use</a>
+    <a href="#en-menu">Pick the right menu</a>
+    <a href="#en-report">Reading the report</a>
+    <a href="#en-rules">Comparison rules</a>
+    <a href="#en-help">Troubleshooting</a>
+  </nav>
+
+  <h2 id="en-steps">How to use</h2>
+  <ol class="steps">
+    <li><div><b>Choose the forwarder in the left menu</b> that matches whoever sent the ENTER. You can type in the search box. On a phone, tap ☰ to open the menu.</div></li>
+    <li><div><b>Add the files.</b> Drag the MANIFEST and ENTER in together, or click the box to pick them.
+      <br><span class="note">File names don't matter — the page sorts them (.xls/.xlsx = MANIFEST, .pdf = ENTER). Several ENTER files for the same vessel can go in at once. Able, LX Pantos, Planet and Union World also accept a PDF “CARGO MANIFEST” as the MANIFEST.</span></div></li>
+    <li><div><b>Enter the SHED NO. (optional)</b>, e.g. <code>0141</code>. Every B/L must match it, except cargo for LAOS. Leave it blank if you don't know it.</div></li>
+    <li><div><b>Click “ตรวจสอบ” (Check).</b> The button becomes active once both a MANIFEST and an ENTER have been added.</div></li>
+    <li><div><b>Review the result on screen.</b> Search by B/L, consignee or container, and tick “แสดงเฉพาะที่ไม่ตรง” (show mismatches only) to see just the rows that need fixing.</div></li>
+    <li><div><b>Click “ดาวน์โหลด EDI.xlsx” (Download).</b> The file is saved to your <b>Downloads</b> folder, named after the forwarder, e.g. <code>EDI Union World.xlsx</code>.</div></li>
+    <li><div><b>To start a new job, click “ลบไฟล์” (Clear files)</b> next to the Check button. It removes all files and results.</div></li>
+  </ol>
+
+  <h2 id="en-menu">Pick the menu that matches the ENTER form</h2>
+  <p>Each menu reads only its own forwarder's ENTER form. If you use the wrong one, the page tells you the form is not supported.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Menu</th><th>ENTER form</th><th>PDF MANIFEST</th></tr></thead>
+    <tbody>
+      <tr><td>Able</td><td>Able's form</td><td>Yes</td></tr>
+      <tr><td>AGN</td><td>AGN AMENDMENT</td><td>–</td></tr>
+      <tr><td>Cargoport</td><td>Cargoport ENTER</td><td>–</td></tr>
+      <tr><td>CMS</td><td>CMS AMENDMENT</td><td>–</td></tr>
+      <tr><td>DSV</td><td>DSV AMENDMENT OF MANIFEST</td><td>–</td></tr>
+      <tr><td>Eastern Air</td><td>Eastern Air INBOUND CARGO MANIFEST</td><td>–</td></tr>
+      <tr><td>Gateway</td><td>Gateway ENTER</td><td>–</td></tr>
+      <tr><td>LX Pantos</td><td>LX PANTOS AMENDMENT OF MANIFEST (one file per B/L, add them together)</td><td>Yes</td></tr>
+      <tr><td>M-CORP</td><td>THE M CORP INBOUND CARGO MANIFEST</td><td>–</td></tr>
+      <tr><td>MAC-NELS</td><td>MAC-NELS SHIPPING ATTACHED SHEETS</td><td>–</td></tr>
+      <tr><td>Penanshin</td><td>Penanshin INBOUND CARGO MANIFEST</td><td>–</td></tr>
+      <tr><td>Planet</td><td>UNITEX (Planet) AMENDMENT</td><td>Yes</td></tr>
+      <tr><td>Quality</td><td>Quality AMENDMENT</td><td>–</td></tr>
+      <tr><td>Shipco</td><td>Shipco AMENDMENT</td><td>–</td></tr>
+      <tr><td>Union World</td><td>UNION WORLD SHIPPING AMENDMENT</td><td>Yes</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="en-report">Reading the report</h2>
+  <p>One row per B/L. The leftmost column summarises what to look at in that row, and every field shows the ENTER value next to the MANIFEST value. The final TOTAL row checks the summed values against the totals each document states.</p>
+  <div class="legend">
+    <div><i style="background:#fff"></i><span><b>White</b> — no error</span></div>
+    <div><i style="background:var(--c-grn)"></i><span><b>Green</b> — passed, nothing wrong found</span></div>
+    <div><i style="background:var(--c-red)"></i><span><b>Red ⚠</b> — mismatch; fix or confirm before filing</span></div>
+    <div><i style="background:var(--c-org)"></i><span><b>Orange</b> — needs a person to confirm, e.g. different line breaks, or a TRANSIT B/L when a PDF MANIFEST lacks that data</span></div>
+    <div><i style="background:var(--c-yel)"></i><span><b>Yellow</b> — no ENTER document to compare against</span></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Checked on every B/L</h3>
+      <ul>
+        <li>CONSIGNEE and TAX ID</li>
+        <li>CONTAINER NO. and STATUS</li>
+        <li>Package count and type (PKG), G.W., MEAS.</li>
+        <li>MARKS and DESCRIPTION</li>
+        <li>SHED NO., destination country, CARGO MOVEMENT</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Always flagged when found</h3>
+      <ul>
+        <li>DG (CLASS / UN)</li>
+        <li>REEFER TEMP</li>
+        <li>INTRANSIT / TRANSHIPMENT</li>
+        <li>A B/L in ENTER that is missing from MANIFEST (critical)</li>
+        <li>TOTAL row not matching the totals the documents state</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="en-rules">Comparison rules worth knowing</h2>
+  <ul>
+    <li><b>STATUS:</b> CY / CY-CY / FCL / container haul = <code>CY</code> · LCL / unload = <code>LCL</code> · CFS / LCL-CFS / devanning = <code>LCL/CFS</code></li>
+    <li><b>TRANSHIPMENT:</b> CARGO MOVEMENT must be <code>3-TRANSHIPMENT</code></li>
+    <li><b>MARKS / DESCRIPTION</b> are compared strictly — only spaces and punctuation are ignored</li>
+    <li>A B/L with several containers must match the MANIFEST on every container</li>
+    <li>Red text the customer typed over the PDF applies to the B/Ls below it; if it says <code>ทุก BL</code> (all B/Ls) it applies to every B/L</li>
+    <li>SHED / destination country / CARGO MOVEMENT / TAX ID show <code>-</code> when they follow the rules</li>
+  </ul>
+
+  <h2 id="en-help">Troubleshooting</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>“ตรวจสอบ” (Check) can't be clicked</td><td>Files are missing — you need both a MANIFEST and an ENTER</td></tr>
+      <tr><td>Message says the form is not supported</td><td>Wrong forwarder menu — choose the one matching the ENTER form (see the table above)</td></tr>
+      <tr><td>ENTER side empty, or unusually many yellow cells</td><td>The ENTER may be a new, unsupported form or a scanned file. Send it to Rattana so the form can be added</td></tr>
+      <tr><td>The page still looks old</td><td>Press <code>Ctrl</code> + <code>F5</code> to reload</td></tr>
+      <tr><td>Can't find the downloaded file</td><td>Look in Downloads for a file starting with <code>EDI</code> followed by the forwarder name</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="alert">This report is a checking aid only. Before filing the declaration, a person must always review every red or orange cell.</div>
+</article>
+
+</div>
+<script>
+// เลือกภาษา: จำค่าที่เลือกไว้ในเบราว์เซอร์ (ถ้าเก็บไม่ได้ก็ใช้ภาษาไทย) · ใส่ ?lang=en ใน URL เพื่อเปิดภาษาอังกฤษได้
+(function () {
+  const btns = document.querySelectorAll(".seg button");
+  function setLang(lang) {
+    document.documentElement.lang = lang;
+    document.getElementById("art-th").hidden = lang !== "th";
+    document.getElementById("art-en").hidden = lang !== "en";
+    btns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    document.querySelectorAll("[data-th]").forEach(el => { el.textContent = el.dataset[lang]; });
+    try { localStorage.setItem("guide-lang", lang); } catch (e) {}
+  }
+  btns.forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  let lang = new URLSearchParams(location.search).get("lang");
+  if (!lang) { try { lang = localStorage.getItem("guide-lang"); } catch (e) {} }
+  setLang(lang === "en" ? "en" : "th");
+})();
+</script>
+</body>
+</html>
