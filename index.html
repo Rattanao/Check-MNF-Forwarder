@@ -40,8 +40,9 @@ button { font: inherit; color: inherit; }
 .pill { color: #fff; font-weight: 600; font-size: 13px; white-space: nowrap; }
 .guide { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #c9d4f0; white-space: nowrap; }
 .guide svg { width: 15px; height: 15px; stroke: #fff; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.guide a { color: #fff; font-weight: 700; text-decoration: none; padding: 1px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,.5); }
-.guide a:hover, .guide a.active { background: #fff; color: var(--blue); }
+/* ปุ่มคู่มือ: ตัวอักษรสีส้ม (สีโลโก้ HAL) พื้นขาว ให้เด่นบนแถบสีน้ำเงิน */
+.guide a { color: var(--red); background: #fff; font-weight: 700; text-decoration: none; padding: 1px 10px; border-radius: 999px; border: 1.5px solid var(--red); }
+.guide a:hover, .guide a.active { background: var(--red); color: #fff; border-color: #fff; }
 
 /* โครงหน้า */
 .layout { display: flex; height: calc(100% - var(--top-h) - var(--foot-h)); }
