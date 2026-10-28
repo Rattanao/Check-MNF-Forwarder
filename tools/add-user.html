@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add user</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #1f3f94; --orange: #e2501f; --line: #d5dae3; --muted: #5b6474; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Sarabun", Tahoma, sans-serif; background: #f3f5f9; color: #1d2433; }
+  main { max-width: 640px; margin: 0 auto; padding: 24px 16px 40px; }
+  h1 { color: var(--blue); margin: 0 0 4px; font-size: 24px; }
+  p { color: var(--muted); margin: 0 0 16px; line-height: 1.6; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; }
+  label { display: grid; gap: 4px; font-weight: 600; color: var(--blue); }
+  input { font: inherit; padding: 9px 12px; border: 1px solid #b8c2d6; border-radius: 8px; }
+  button { font: inherit; font-weight: 700; border: 0; border-radius: 8px; padding: 10px 16px; background: var(--orange); color: #fff; cursor: pointer; justify-self: start; }
+  pre { margin: 0; background: #0f1b3d; color: #e8edf8; padding: 12px 14px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; font-size: 13px; min-height: 2.6em; }
+  ol { color: var(--muted); line-height: 1.7; padding-left: 20px; }
+  code { background: #e7ecf7; color: var(--blue); padding: 1px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Add a user</h1>
+  <p>For the site owner. Nothing is saved or sent anywhere — this page only makes the line to paste into <code>auth.js</code>.</p>
+  <form class="card" id="f">
+    <label>User ID<input id="id" required autocomplete="off"></label>
+    <label>Password<input id="pw" required autocomplete="new-password"></label>
+    <button>Make the line</button>
+    <pre id="out"></pre>
+    <button type="button" id="copy" hidden>Copy</button>
+  </form>
+  <ol>
+    <li>Open <code>auth.js</code> in the repository (on GitHub: the file, then the pencil icon).</li>
+    <li>Paste the line inside <code>users: [ … ]</code>, under the other users.</li>
+    <li>To remove someone, delete their line. To turn the sign-in on or off, set <code>lock: true</code> or <code>lock: false</code>.</li>
+    <li>Commit. The site updates in about a minute.</li>
+  </ol>
+</main>
+<script src="../auth.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+$("f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const id = $("id").value.trim().toUpperCase();
+  const hash = await AUTH.hash(id, $("pw").value);
+  $("out").textContent = `    { id: "${id.replace(/["\\]/g, "")}", hash: "${hash}" },`;
+  $("copy").hidden = false;
+});
+$("copy").addEventListener("click", () => navigator.clipboard.writeText($("out").textContent).then(() => { $("copy").textContent = "Copied"; setTimeout(() => $("copy").textContent = "Copy", 1500); }));
+</script>
+</body>
+</html>

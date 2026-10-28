@@ -5,9 +5,11 @@
 //  4. แสดงเป็นภาษาอังกฤษ (โหลด en.js)
 // ดาวน์โหลด: ใช้การดาวน์โหลดปกติของเบราว์เซอร์ ไฟล์ลงโฟลเดอร์ Downloads เสมอ ไม่ถามโฟลเดอร์
 (function () {
-  const en = document.createElement("script");
-  en.src = "../en.js";
-  document.head.appendChild(en);
+  for (const src of ["../guard.js", "../en.js"]) {     // guard.js: ต้องเข้าระบบก่อน (เมื่อ auth.js ตั้ง lock: true)
+    const s = document.createElement("script");
+    s.src = src;
+    document.head.appendChild(s);
+  }
 
   // ชื่อที่ใช้ต่อท้ายไฟล์ ตามโฟลเดอร์ tools/<ชื่อ>/ (เพิ่มเครื่องมือใหม่: เพิ่มที่นี่ด้วย)
   const NAMES = {
