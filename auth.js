@@ -5,7 +5,8 @@
 // ลบผู้ใช้: ลบบรรทัดของคนนั้นออก
 //
 // เก็บเฉพาะค่า hash ของรหัสผ่าน ไม่เก็บรหัสผ่านจริงในไฟล์นี้
-// hash = SHA-256 ของ "Check-MNF-Forwarder|<USER ID ตัวใหญ่>|<password>"
+// User ID และ Password พิมพ์ตัวเล็กหรือตัวใหญ่ก็ได้
+// hash = SHA-256 ของ "Check-MNF-Forwarder|<USER ID ตัวใหญ่>|<PASSWORD ตัวใหญ่>"
 window.AUTH = {
   lock: false,
   users: [
@@ -15,12 +16,13 @@ window.AUTH = {
     { id: "FAH", hash: "317019279f6cb1d8885866a1ff451b878c8e1060568712fd28e089680dcdc036" },
     { id: "BEN", hash: "efb5fd8412c3d8137e4b6820feaaa8d5c19a54074e568300950a04e1c27bef3d" },
     { id: "BEE", hash: "a92136b39785321a5167d7dc0409614dd639216d02ee1c65e251b5349aa8fbb1" },
+    { id: "HAL", hash: "dbc607cac4a131178c718e995d2dce338842b545805789250221c8f05ca8939d" },
   ],
 };
 
 // ใช้ร่วมกันในหน้าเว็บรวมและหน้าเครื่องมือ
 window.AUTH.hash = async (id, password) => {
-  const data = new TextEncoder().encode("Check-MNF-Forwarder|" + id.trim().toUpperCase() + "|" + password);
+  const data = new TextEncoder().encode("Check-MNF-Forwarder|" + id.trim().toUpperCase() + "|" + password.toUpperCase());
   const buf = await crypto.subtle.digest("SHA-256", data);
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 };
