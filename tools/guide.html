@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,15 +70,15 @@ li { margin: 2px 0; }
 <div class="wrap">
 
 <div class="langbar">
-  <span class="lbl" data-th="เลือกภาษา" data-en="Language">เลือกภาษา</span>
+  <span class="lbl" data-th="เลือกภาษา" data-en="Language">Language</span>
   <div class="seg" role="group" aria-label="Language / ภาษา">
-    <button type="button" data-lang="th" aria-pressed="true">ไทย</button>
-    <button type="button" data-lang="en" aria-pressed="false">English</button>
+    <button type="button" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-lang="th" aria-pressed="false">ไทย</button>
   </div>
 </div>
 
 <!-- ======================= ภาษาไทย ======================= -->
-<article lang="th" id="art-th">
+<article lang="th" id="art-th" hidden>
   <h1>คู่มือการใช้งาน Check MNF Forwarder</h1>
   <p class="lede">เวปนี้ใช้เทียบ MANIFEST ของสายเรือกับ ENTER ของ Forwarder แต่ละราย ได้ผลเป็นรายงาน Excel ใส่สี ช่องไหนไม่ตรงจะเห็นทันทีก่อนยื่นใบขนสินค้าขาเข้า</p>
   <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;ชื่อ Forwarder&gt;.xlsx</span></div>
@@ -96,22 +96,22 @@ li { margin: 2px 0; }
   <p>เมนูบนสุด <b>Check all files</b> รับ MANIFEST และ ENTER ของ Forwarder ไหนก็ได้ แล้วหาให้เองว่า ENTER แต่ละไฟล์เป็นฟอร์มของใคร จากนั้นตรวจด้วยกฎของเจ้านั้น</p>
   <ol class="steps">
     <li><div><b>ใส่ไฟล์ MANIFEST 1 ไฟล์ และ ENTER กี่ไฟล์ก็ได้</b> ENTER หลายเจ้าในเรือลำเดียวกันใส่พร้อมกันได้ · ใส่ SHED NO. ได้เหมือนเมนูปกติ</div></li>
-    <li><div><b>กด “ตรวจสอบ”</b> เวปลองอ่าน ENTER ด้วยตัวตรวจของทุกเจ้า (ใช้เวลาราว 5–20 วินาที) แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด ถ้าหลายเจ้าใช้ฟอร์มเดียวกัน (เช่น INBOUND CARGO MANIFEST ของ CMS / Eastern Air / M-CORP / Penanshin) ดูจากชื่อเจ้าในเอกสารหรือชื่อไฟล์</div></li>
-    <li><div><b>ดูตาราง “เป็นของ”</b> ว่าแต่ละไฟล์ถูกจับคู่กับเจ้าไหน ถ้าไม่ถูก ให้ใช้เมนูของเจ้านั้นโดยตรง · ไฟล์ที่ขึ้น <b>ไม่รู้จักฟอร์มนี้</b> ยังไม่มีเมนูที่อ่านได้</div></li>
+    <li><div><b>กด “Check” (ตรวจสอบ)</b> เวปลองอ่าน ENTER ด้วยตัวตรวจของทุกเจ้า (ใช้เวลาราว 5–20 วินาที) แล้วเลือกเจ้าที่รู้จักฟอร์มนั้น และอ่านเลข B/L ตรงกับ MANIFEST ได้มากที่สุด ถ้าหลายเจ้าใช้ฟอร์มเดียวกัน (เช่น INBOUND CARGO MANIFEST ของ CMS / Eastern Air / M-CORP / Penanshin) ดูจากชื่อเจ้าในเอกสารหรือชื่อไฟล์</div></li>
+    <li><div><b>ดูตาราง “Belongs to” (เป็นของ)</b> ว่าแต่ละไฟล์ถูกจับคู่กับเจ้าไหน ถ้าไม่ถูก ให้ใช้เมนูของเจ้านั้นโดยตรง · ไฟล์ที่ขึ้น <b>Unknown form</b> (ไม่รู้จักฟอร์มนี้) ยังไม่มีเมนูที่อ่านได้</div></li>
     <li><div><b>ผลแยกเป็นแท็บละเจ้า</b> แต่ละแท็บคือหน้าของเจ้านั้นเอง ค้นหา กรอง และดาวน์โหลด <code>EDI &lt;ชื่อเจ้า&gt;.xlsx</code> ได้ตามปกติ</div></li>
   </ol>
   <p class="note">ENTER ที่รวมหลายฟอร์มในไฟล์เดียว (เช่นชุดรวมของ HAHM) จะแยกเป็นหลายแท็บ แต่ละแท็บเห็นเฉพาะ B/L ที่ฟอร์มของเจ้านั้นอ่านได้ ที่เหลือขึ้นสีเหลือง — ไฟล์แบบนี้ต้องตรวจซ้ำด้วยคนเสมอ</p>
 
   <h2 id="th-steps">ขั้นตอนการใช้งาน</h2>
   <ol class="steps">
-    <li><div><b>เลือก Forwarder จากเมนูด้านซ้าย</b> ให้ตรงกับผู้ส่ง ENTER ค้นหาจากช่อง “ค้นหาเครื่องมือ” ได้ บนมือถือกดปุ่ม ☰ เพื่อเปิดเมนู</div></li>
+    <li><div><b>เลือก Forwarder จากเมนูด้านซ้าย</b> ให้ตรงกับผู้ส่ง ENTER ค้นหาจากช่อง “Search tools” ได้ บนมือถือกดปุ่ม ☰ เพื่อเปิดเมนู</div></li>
     <li><div><b>ใส่ไฟล์</b> ลากไฟล์ MANIFEST และ ENTER มาวางพร้อมกัน หรือคลิกกรอบเพื่อเลือกไฟล์
       <br><span class="note">ตั้งชื่อไฟล์อะไรก็ได้ เวปแยกให้เอง (.xls/.xlsx = MANIFEST, .pdf = ENTER) · ENTER หลายไฟล์ของเรือลำเดียวกันใส่พร้อมกันได้ · Able, Handle Inter, LX Pantos, Planet, Sinotrans, Union World รับ MANIFEST แบบ PDF “CARGO MANIFEST” ได้ด้วย</span></div></li>
     <li><div><b>ใส่ SHED NO. (ถ้ามี)</b> เช่น <code>0141</code> ทุก B/L ต้องตรงเลขนี้ ยกเว้นสินค้าไป LAOS · ถ้าไม่รู้เว้นว่างได้</div></li>
-    <li><div><b>กดปุ่ม “ตรวจสอบ”</b> ปุ่มจะกดได้เมื่อใส่ไฟล์ครบทั้ง MANIFEST และ ENTER</div></li>
-    <li><div><b>ดูผลบนหน้าจอ</b> ค้นหา B/L / ผู้รับ / เลขตู้ ได้ และติ๊ก “แสดงเฉพาะที่ไม่ตรง” เพื่อดูเฉพาะแถวที่ต้องแก้</div></li>
-    <li><div><b>กด “ดาวน์โหลด EDI.xlsx”</b> ไฟล์จะลงโฟลเดอร์ <b>Downloads</b> ชื่อตาม Forwarder เช่น <code>EDI Union World.xlsx</code></div></li>
-    <li><div><b>เริ่มงานใหม่ กดปุ่ม “ลบไฟล์”</b> ข้างปุ่มตรวจสอบ เพื่อล้างไฟล์และผลเก่าทั้งหมด</div></li>
+    <li><div><b>กดปุ่ม “Check” (ตรวจสอบ)</b> ปุ่มจะกดได้เมื่อใส่ไฟล์ครบทั้ง MANIFEST และ ENTER</div></li>
+    <li><div><b>ดูผลบนหน้าจอ</b> ค้นหา B/L / ผู้รับ / เลขตู้ ได้ และติ๊ก “Show mismatches only” (แสดงเฉพาะที่ไม่ตรง) เพื่อดูเฉพาะแถวที่ต้องแก้</div></li>
+    <li><div><b>กด “Download EDI.xlsx”</b> ไฟล์จะลงโฟลเดอร์ <b>Downloads</b> ชื่อตาม Forwarder เช่น <code>EDI Union World.xlsx</code></div></li>
+    <li><div><b>เริ่มงานใหม่ กดปุ่ม “Clear files” (ลบไฟล์)</b> ข้างปุ่มตรวจสอบ เพื่อล้างไฟล์และผลเก่าทั้งหมด</div></li>
   </ol>
 
   <h2 id="th-menu">เลือกเมนูให้ตรงฟอร์ม ENTER</h2>
@@ -186,7 +186,7 @@ li { margin: 2px 0; }
   <div class="tbl"><table>
     <thead><tr><th>อาการ</th><th>วิธีแก้</th></tr></thead>
     <tbody>
-      <tr><td>ปุ่ม “ตรวจสอบ” กดไม่ได้</td><td>ยังใส่ไฟล์ไม่ครบ ต้องมีทั้ง MANIFEST และ ENTER</td></tr>
+      <tr><td>ปุ่ม “Check” (ตรวจสอบ) กดไม่ได้</td><td>ยังใส่ไฟล์ไม่ครบ ต้องมีทั้ง MANIFEST และ ENTER</td></tr>
       <tr><td>แจ้งว่าไม่ใช่ฟอร์มที่รองรับ</td><td>เลือกเมนูผิด Forwarder ให้เลือกเมนูที่ตรงกับฟอร์ม ENTER (ดูตารางด้านบน)</td></tr>
       <tr><td>ฝั่ง ENTER ว่าง หรือเหลืองเยอะผิดปกติ</td><td>ENTER อาจเป็นฟอร์มใหม่ที่ยังไม่รองรับ หรือเป็นไฟล์สแกน ส่งไฟล์ให้ Rattana เพื่อเพิ่มฟอร์ม</td></tr>
       <tr><td>หน้าเวปยังเป็นแบบเก่า</td><td>กด <code>Ctrl</code> + <code>F5</code> เพื่อโหลดหน้าใหม่</td></tr>
@@ -198,7 +198,7 @@ li { margin: 2px 0; }
 </article>
 
 <!-- ======================= English ======================= -->
-<article lang="en" id="art-en" hidden>
+<article lang="en" id="art-en">
   <h1>Check MNF Forwarder — User Guide</h1>
   <p class="lede">This site compares the shipping line's MANIFEST with each forwarder's ENTER document and produces a colour-coded Excel report, so every mismatch is visible before you file the import customs declaration.</p>
   <div class="flow"><span>MANIFEST (.xls/.xlsx)</span><i>+</i><span>ENTER (.pdf)</span><i>→</i><span class="out">EDI &lt;Forwarder&gt;.xlsx</span></div>
@@ -216,8 +216,8 @@ li { margin: 2px 0; }
   <p>The top menu, <b>Check all files</b>, takes a MANIFEST and ENTER files from any forwarder, works out whose form each ENTER file is, and checks it with that forwarder's rules.</p>
   <ol class="steps">
     <li><div><b>Add one MANIFEST and any number of ENTER files.</b> ENTERs from several forwarders on the same vessel can go in together. SHED NO. works as in the normal menus.</div></li>
-    <li><div><b>Click “ตรวจสอบ” (Check).</b> The page reads each ENTER with every forwarder's checker (about 5–20 seconds) and picks the one that recognises the form and matches the most B/L numbers in the MANIFEST. When several forwarders share a form (e.g. the INBOUND CARGO MANIFEST of CMS / Eastern Air / M-CORP / Penanshin), the forwarder name in the document or file name decides.</div></li>
-    <li><div><b>Check the “เป็นของ” (Belongs to) table</b> to see which forwarder each file was matched to. If it is wrong, use that forwarder's own menu instead. A file marked <b>ไม่รู้จักฟอร์มนี้</b> (unknown form) has no menu that can read it yet.</div></li>
+    <li><div><b>Click “Check”.</b> The page reads each ENTER with every forwarder's checker (about 5–20 seconds) and picks the one that recognises the form and matches the most B/L numbers in the MANIFEST. When several forwarders share a form (e.g. the INBOUND CARGO MANIFEST of CMS / Eastern Air / M-CORP / Penanshin), the forwarder name in the document or file name decides.</div></li>
+    <li><div><b>Check the “Belongs to” table</b> to see which forwarder each file was matched to. If it is wrong, use that forwarder's own menu instead. A file marked <b>Unknown form</b> has no menu that can read it yet.</div></li>
     <li><div><b>Results come in one tab per forwarder.</b> Each tab is that forwarder's own page, so search, filter and download <code>EDI &lt;Forwarder&gt;.xlsx</code> work as usual.</div></li>
   </ol>
   <p class="note">A single ENTER file that bundles several forwarders' forms (such as the HAHM bundle) is split across several tabs. Each tab shows only the B/Ls that forwarder's form reader could read; the rest show yellow. Always re-check such files by hand.</p>
@@ -228,10 +228,10 @@ li { margin: 2px 0; }
     <li><div><b>Add the files.</b> Drag the MANIFEST and ENTER in together, or click the box to pick them.
       <br><span class="note">File names don't matter — the page sorts them (.xls/.xlsx = MANIFEST, .pdf = ENTER). Several ENTER files for the same vessel can go in at once. Able, Handle Inter, LX Pantos, Planet, Sinotrans and Union World also accept a PDF “CARGO MANIFEST” as the MANIFEST.</span></div></li>
     <li><div><b>Enter the SHED NO. (optional)</b>, e.g. <code>0141</code>. Every B/L must match it, except cargo for LAOS. Leave it blank if you don't know it.</div></li>
-    <li><div><b>Click “ตรวจสอบ” (Check).</b> The button becomes active once both a MANIFEST and an ENTER have been added.</div></li>
-    <li><div><b>Review the result on screen.</b> Search by B/L, consignee or container, and tick “แสดงเฉพาะที่ไม่ตรง” (show mismatches only) to see just the rows that need fixing.</div></li>
-    <li><div><b>Click “ดาวน์โหลด EDI.xlsx” (Download).</b> The file is saved to your <b>Downloads</b> folder, named after the forwarder, e.g. <code>EDI Union World.xlsx</code>.</div></li>
-    <li><div><b>To start a new job, click “ลบไฟล์” (Clear files)</b> next to the Check button. It removes all files and results.</div></li>
+    <li><div><b>Click “Check”.</b> The button becomes active once both a MANIFEST and an ENTER have been added.</div></li>
+    <li><div><b>Review the result on screen.</b> Search by B/L, consignee or container, and tick “Show mismatches only” to see just the rows that need fixing.</div></li>
+    <li><div><b>Click “Download EDI.xlsx”.</b> The file is saved to your <b>Downloads</b> folder, named after the forwarder, e.g. <code>EDI Union World.xlsx</code>.</div></li>
+    <li><div><b>To start a new job, click “Clear files”</b> next to the Check button. It removes all files and results.</div></li>
   </ol>
 
   <h2 id="en-menu">Pick the menu that matches the ENTER form</h2>
@@ -306,7 +306,7 @@ li { margin: 2px 0; }
   <div class="tbl"><table>
     <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
     <tbody>
-      <tr><td>“ตรวจสอบ” (Check) can't be clicked</td><td>Files are missing — you need both a MANIFEST and an ENTER</td></tr>
+      <tr><td>“Check” can't be clicked</td><td>Files are missing — you need both a MANIFEST and an ENTER</td></tr>
       <tr><td>Message says the form is not supported</td><td>Wrong forwarder menu — choose the one matching the ENTER form (see the table above)</td></tr>
       <tr><td>ENTER side empty, or unusually many yellow cells</td><td>The ENTER may be a new, unsupported form or a scanned file. Send it to Rattana so the form can be added</td></tr>
       <tr><td>The page still looks old</td><td>Press <code>Ctrl</code> + <code>F5</code> to reload</td></tr>
@@ -319,7 +319,7 @@ li { margin: 2px 0; }
 
 </div>
 <script>
-// เลือกภาษา: จำค่าที่เลือกไว้ในเบราว์เซอร์ (ถ้าเก็บไม่ได้ก็ใช้ภาษาไทย) · ใส่ ?lang=en ใน URL เพื่อเปิดภาษาอังกฤษได้
+// language: English by default, remembered in the browser ("site-lang", shared with Check all files) · ?lang=th opens Thai
 (function () {
   const btns = document.querySelectorAll(".seg button");
   function setLang(lang) {
@@ -328,13 +328,13 @@ li { margin: 2px 0; }
     document.getElementById("art-en").hidden = lang !== "en";
     btns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
     document.querySelectorAll("[data-th]").forEach(el => { el.textContent = el.dataset[lang]; });
-    try { localStorage.setItem("guide-lang", lang); } catch (e) {}
+    try { localStorage.setItem("site-lang", lang); } catch (e) {}
   }
   btns.forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
   window.setGuideLang = setLang;   // ลิงก์คู่มือบนแถบบนของเว็บรวมเรียกใช้
   let lang = new URLSearchParams(location.search).get("lang");
-  if (!lang) { try { lang = localStorage.getItem("guide-lang"); } catch (e) {} }
-  setLang(lang === "en" ? "en" : "th");
+  if (!lang) { try { lang = localStorage.getItem("site-lang"); } catch (e) {} }
+  setLang(lang === "th" ? "th" : "en");
 })();
 </script>
 </body>

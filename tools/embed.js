@@ -2,8 +2,13 @@
 //  1. แสดงในเว็บรวม: ซ่อนหัว/ท้ายของเครื่องมือ ใช้ธีมสว่าง
 //  2. ปุ่ม "ลบไฟล์" ข้างปุ่มประมวลผล สำหรับเครื่องมือที่ยังไม่มี
 //  3. ตั้งชื่อไฟล์ดาวน์โหลดตามเครื่องมือ เช่น EDI.xlsx -> "EDI Union World.xlsx"
+//  4. แสดงเป็นภาษาอังกฤษ (โหลด en.js)
 // ดาวน์โหลด: ใช้การดาวน์โหลดปกติของเบราว์เซอร์ ไฟล์ลงโฟลเดอร์ Downloads เสมอ ไม่ถามโฟลเดอร์
 (function () {
+  const en = document.createElement("script");
+  en.src = "../en.js";
+  document.head.appendChild(en);
+
   // ชื่อที่ใช้ต่อท้ายไฟล์ ตามโฟลเดอร์ tools/<ชื่อ>/ (เพิ่มเครื่องมือใหม่: เพิ่มที่นี่ด้วย)
   const NAMES = {
     "able": "Able", "agn": "AGN", "cargoport": "Cargoport", "cms": "CMS", "dsv": "DSV", "eastern-air": "Eastern Air", "freight-links": "Freight Links",
@@ -54,8 +59,8 @@
     const b = document.createElement("button");
     b.type = "button";
     b.className = "x-clear";
-    b.textContent = "ลบไฟล์";
-    b.title = "ล้างไฟล์และผลลัพธ์ทั้งหมด เริ่มใหม่";
+    b.textContent = "Clear files";
+    b.title = "Remove all files and results and start again";
     // โหลดหน้าใหม่ด้วย URL ใหม่ เพื่อไม่ให้เบราว์เซอร์คืนค่าที่กรอกไว้
     b.addEventListener("click", () => location.replace(location.pathname + "?clear=" + Date.now()));
     if (run.parentElement.classList.contains("row")) {

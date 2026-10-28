@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,7 +91,7 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
 <body>
 
 <header class="topbar">
-  <button class="burger" id="burger" aria-label="เปิด/ปิดเมนู">
+  <button class="burger" id="burger" aria-label="Open/close menu">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
   </button>
   <div class="brand" aria-label="Heung A Line">
@@ -112,7 +112,7 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
   <div class="top-right">
     <span class="pill">Processed in your browser · No files are uploaded</span>
     <div class="guide"><svg viewBox="0 0 24 24" id="guideIcon"></svg>
-      <a href="#guide" data-lang="th">คู่มือ (ไทย)</a><a href="#guide" data-lang="en">User Guide (English)</a>
+      <a href="#guide" data-lang="en">User Guide</a><a href="#guide" data-lang="th">ไทย</a>
     </div>
   </div>
 </header>
@@ -120,11 +120,11 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
 <div class="layout">
   <nav class="side" id="side">
     <div class="search">
-      <input id="q" type="text" placeholder="ค้นหาเครื่องมือ" autocomplete="off">
-      <button id="qClear" aria-label="ล้างคำค้นหา"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <input id="q" type="text" placeholder="Search tools" autocomplete="off">
+      <button id="qClear" aria-label="Clear search"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div id="menu"></div>
-    <div class="none" id="none" hidden>ไม่พบรายการ</div>
+    <div class="none" id="none" hidden>No matches</div>
   </nav>
 
   <main class="main">
@@ -147,31 +147,31 @@ const ICON = {
   book:  '<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5M8 7h8M8 11h6"/>'
 };
 const GROUPS = [
-  { name: "ตรวจทุกเจ้า · Check all", tools: [
-    { id: "all", title: "Check all files", desc: "ใส่ MANIFEST / ENTER ของ Forwarder ไหนก็ได้ ระบบหาเจ้าของฟอร์มให้เอง แล้วตรวจด้วยกฎของเจ้านั้น → EDI <ชื่อเจ้า>.xlsx", src: "tools/all/index.html", icon: "all" }
+  { name: "Check all forwarders", tools: [
+    { id: "all", title: "Check all files", desc: "Add a MANIFEST / ENTER from any forwarder — the page finds whose form it is and checks it with that forwarder's rules → EDI &lt;Forwarder&gt;.xlsx", src: "tools/all/index.html", icon: "all" }
   ]},
-  { name: "ตรวจสอบ EDI Forwarder", tools: [
-    { id: "able",      title: "Check EDI Able",      desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Able) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
-    { id: "agn",       title: "Check EDI AGN",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ AGN) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
-    { id: "cargoport", title: "Check EDI Cargoport", desc: "ตรวจเทียบ MANIFEST กับ ENTER (Cargoport) → EDI.xlsx", src: "tools/cargoport/index.html", icon: "check" },
-    { id: "cms",       title: "Check EDI CMS",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ CMS) → EDI.xlsx", src: "tools/cms/index.html", icon: "check" },
-    { id: "dsv",       title: "Check EDI DSV",       desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ DSV) → EDI.xlsx", src: "tools/dsv/index.html", icon: "check" },
-    { id: "eastern-air", title: "Check EDI Eastern Air", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ Eastern Air) → EDI.xlsx", src: "tools/eastern-air/index.html", icon: "check" },
-    { id: "freight-links", title: "Check EDI Freight Links", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม IMPORT CARGO MANIFEST ของ Freight Links) → EDI.xlsx", src: "tools/freight-links/index.html", icon: "check" },
-    { id: "gateway",   title: "Check EDI Gateway",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม Gateway) → EDI.xlsx", src: "tools/gateway/index.html", icon: "check" },
-    { id: "handle-inter", title: "Check EDI Handle Inter", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (AMENDMENT ของ H.I.T. INTERCON / Handle Inter) → EDI.xlsx", src: "tools/handle-inter/index.html", icon: "check" },
-    { id: "lx-pantos", title: "Check EDI LX Pantos", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์ม AMENDMENT OF MANIFEST ของ LX PANTOS) → EDI.xlsx", src: "tools/lx-pantos/index.html", icon: "check" },
-    { id: "m-corp",    title: "Check EDI M-CORP",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ THE M CORP) → EDI.xlsx", src: "tools/m-corp/index.html", icon: "check" },
-    { id: "mac-nels",  title: "Check EDI MAC-NELS",  desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม ATTACHED SHEETS ของ MAC-NELS SHIPPING) → EDI.xlsx", src: "tools/mac-nels/index.html", icon: "check" },
-    { id: "penanshin", title: "Check EDI Penanshin", desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม INBOUND CARGO MANIFEST ของ Penanshin) → EDI.xlsx", src: "tools/penanshin/index.html", icon: "check" },
-    { id: "planet",    title: "Check EDI Planet",    desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์ม AMENDMENT ของ UNITEX (Planet)) → EDI.xlsx", src: "tools/planet/index.html", icon: "check" },
-    { id: "quality",   title: "Check EDI Quality",   desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Quality) → EDI.xlsx", src: "tools/quality/index.html", icon: "check" },
-    { id: "shipco",    title: "Check EDI Shipco",    desc: "ตรวจเทียบ MANIFEST กับ ENTER (ฟอร์ม AMENDMENT ของ Shipco) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" },
-    { id: "sinotrans", title: "Check EDI Sinotrans", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (จดหมายแก้ MANIFEST ของ SINOTRANS) → EDI.xlsx", src: "tools/sinotrans/index.html", icon: "check" },
-    { id: "union-world", title: "Check EDI Union World", desc: "ตรวจเทียบ MANIFEST (.xls หรือ PDF) กับ ENTER (ฟอร์มของ Union World) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
+  { name: "Check EDI by forwarder", tools: [
+    { id: "able",      title: "Check EDI Able",      desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (Able form) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
+    { id: "agn",       title: "Check EDI AGN",       desc: "Compare the MANIFEST with the ENTER (AGN AMENDMENT) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
+    { id: "cargoport", title: "Check EDI Cargoport", desc: "Compare the MANIFEST with the ENTER (Cargoport) → EDI.xlsx", src: "tools/cargoport/index.html", icon: "check" },
+    { id: "cms",       title: "Check EDI CMS",       desc: "Compare the MANIFEST with the ENTER (CMS AMENDMENT) → EDI.xlsx", src: "tools/cms/index.html", icon: "check" },
+    { id: "dsv",       title: "Check EDI DSV",       desc: "Compare the MANIFEST with the ENTER (DSV AMENDMENT OF MANIFEST) → EDI.xlsx", src: "tools/dsv/index.html", icon: "check" },
+    { id: "eastern-air", title: "Check EDI Eastern Air", desc: "Compare the MANIFEST with the ENTER (Eastern Air INBOUND CARGO MANIFEST) → EDI.xlsx", src: "tools/eastern-air/index.html", icon: "check" },
+    { id: "freight-links", title: "Check EDI Freight Links", desc: "Compare the MANIFEST with the ENTER (Freight Links IMPORT CARGO MANIFEST) → EDI.xlsx", src: "tools/freight-links/index.html", icon: "check" },
+    { id: "gateway",   title: "Check EDI Gateway",   desc: "Compare the MANIFEST with the ENTER (Gateway form) → EDI.xlsx", src: "tools/gateway/index.html", icon: "check" },
+    { id: "handle-inter", title: "Check EDI Handle Inter", desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (H.I.T. INTERCON / Handle Inter AMENDMENT) → EDI.xlsx", src: "tools/handle-inter/index.html", icon: "check" },
+    { id: "lx-pantos", title: "Check EDI LX Pantos", desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (LX PANTOS AMENDMENT OF MANIFEST) → EDI.xlsx", src: "tools/lx-pantos/index.html", icon: "check" },
+    { id: "m-corp",    title: "Check EDI M-CORP",    desc: "Compare the MANIFEST with the ENTER (THE M CORP INBOUND CARGO MANIFEST) → EDI.xlsx", src: "tools/m-corp/index.html", icon: "check" },
+    { id: "mac-nels",  title: "Check EDI MAC-NELS",  desc: "Compare the MANIFEST with the ENTER (MAC-NELS SHIPPING ATTACHED SHEETS) → EDI.xlsx", src: "tools/mac-nels/index.html", icon: "check" },
+    { id: "penanshin", title: "Check EDI Penanshin", desc: "Compare the MANIFEST with the ENTER (Penanshin INBOUND CARGO MANIFEST) → EDI.xlsx", src: "tools/penanshin/index.html", icon: "check" },
+    { id: "planet",    title: "Check EDI Planet",    desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (UNITEX (Planet) AMENDMENT) → EDI.xlsx", src: "tools/planet/index.html", icon: "check" },
+    { id: "quality",   title: "Check EDI Quality",   desc: "Compare the MANIFEST with the ENTER (Quality AMENDMENT) → EDI.xlsx", src: "tools/quality/index.html", icon: "check" },
+    { id: "shipco",    title: "Check EDI Shipco",    desc: "Compare the MANIFEST with the ENTER (Shipco AMENDMENT) → EDI.xlsx", src: "tools/shipco/index.html", icon: "check" },
+    { id: "sinotrans", title: "Check EDI Sinotrans", desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (SINOTRANS manifest correction letter) → EDI.xlsx", src: "tools/sinotrans/index.html", icon: "check" },
+    { id: "union-world", title: "Check EDI Union World", desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (Union World form) → EDI.xlsx", src: "tools/union-world/index.html", icon: "check" }
   ]},
-  { name: "คู่มือ · Guide", hidden: true, tools: [
-    { id: "guide", title: "คู่มือการใช้งาน / User Guide", desc: "วิธีใช้ อ่านรายงาน และแก้ปัญหา · เลือกภาษาไทย หรือ English ได้ที่มุมขวาบน", src: "tools/guide.html", icon: "book" }
+  { name: "Guide", hidden: true, tools: [
+    { id: "guide", title: "User Guide", desc: "How to use the tools, read the report and fix problems · switch to Thai (ไทย) at the top right", src: "tools/guide.html", icon: "book" }
   ]}
 ];
 const TOOLS = GROUPS.flatMap(g => g.tools.map(t => ({ ...t, group: g.name })));
@@ -186,9 +186,9 @@ $("menu").innerHTML = GROUPS.filter(g => !g.hidden).map(g => `
   </div>`).join("");
 
 $("guideIcon").innerHTML = ICON.book;
-// ลิงก์คู่มือใต้ "No files are uploaded": เลือกภาษาแล้วเปิดคู่มือ (คู่มือจำภาษาไว้ใน localStorage "guide-lang")
+// guide links under "No files are uploaded": pick the language and open the guide (saved in localStorage "site-lang")
 document.querySelectorAll(".guide a").forEach(a => a.addEventListener("click", () => {
-  try { localStorage.setItem("guide-lang", a.dataset.lang); } catch (e) {}
+  try { localStorage.setItem("site-lang", a.dataset.lang); } catch (e) {}
   // คู่มือและหน้า Check all files ที่เปิดอยู่เปลี่ยนภาษาตาม
   document.querySelectorAll("#card iframe").forEach(f => { try { f.contentWindow.setGuideLang && f.contentWindow.setGuideLang(a.dataset.lang); } catch (e) {} });
   setTimeout(show);
@@ -197,13 +197,13 @@ document.querySelectorAll(".guide a").forEach(a => a.addEventListener("click", (
 document.querySelectorAll(".group-head").forEach(b =>
   b.addEventListener("click", () => b.parentElement.classList.toggle("closed")));
 
-// เปิดเครื่องมือตาม hash; iframe ถูกสร้างครั้งเดียวแล้วซ่อน/แสดง เพื่อให้งานที่ทำค้างไว้ไม่หาย
+// open the tool named in the hash; iframe ถูกสร้างครั้งเดียวแล้วซ่อน/แสดง เพื่อให้งานที่ทำค้างไว้ไม่หาย
 function show() {
   const t = TOOLS.find(t => t.id === location.hash.slice(1)) || TOOLS[0];
   $("crumb").innerHTML = `${t.group} › ${t.title}<small>${t.desc}</small>`;
   document.title = t.title + " · Check MNF Forwarder";
   document.querySelectorAll(".item").forEach(a => a.classList.toggle("active", a.dataset.id === t.id));
-  let gl = "th"; try { gl = localStorage.getItem("guide-lang") === "en" ? "en" : "th"; } catch (e) {}
+  let gl = "en"; try { gl = localStorage.getItem("site-lang") === "th" ? "th" : "en"; } catch (e) {}
   document.querySelectorAll(".guide a").forEach(a => a.classList.toggle("active", t.id === "guide" && a.dataset.lang === gl));
   let frame = document.querySelector(`iframe[data-id="${t.id}"]`);
   if (!frame) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,7 +63,7 @@
   <div class="head">
     <div><h1>Check all files</h1>
     <p class="sub" data-i="sub"></p></div>
-    <div class="seg" role="group" aria-label="Language / ภาษา"><button type="button" data-lang="th">ไทย</button><button type="button" data-lang="en">English</button></div>
+    <div class="seg" role="group" aria-label="Language / ภาษา"><button type="button" data-lang="en">English</button><button type="button" data-lang="th">ไทย</button></div>
   </div>
 
   <section class="card">
@@ -112,7 +112,7 @@ const TOOLS = [
   { id: "sinotrans", name: "Sinotrans", hint: /SINOTRANS/i },
   { id: "union-world", name: "Union World", hint: /UNION\s*WORLD/i },
 ];
-// ข้อความสองภาษา: ใช้ค่าภาษาเดียวกับคู่มือ (localStorage "guide-lang") · ?lang=en เปิดภาษาอังกฤษ
+// two languages, English by default: shares the saved language with the guide (localStorage "site-lang") · ?lang=th opens Thai
 // หน้าผลของแต่ละเจ้า (ในแท็บ) ยังเป็นภาษาไทยตามเครื่องมือต้นฉบับ
 const TEXT = {
   th: {
@@ -154,16 +154,16 @@ const TEXT = {
     error: "Error: ", loadSlow: "Took too long to load: ", loadFail: "Could not open the tool: "
   }
 };
-let lang = "th";
+let lang = "en";
 const L = (k, ...a) => { const v = TEXT[lang][k]; return typeof v === "function" ? v(...a) : v; };
 function setLang(l) {
-  lang = l === "en" ? "en" : "th";
+  lang = l === "th" ? "th" : "en";
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-i]").forEach(el => { el.innerHTML = L(el.dataset.i); });
   document.getElementById("shed").placeholder = L("shedPh");
   document.getElementById("clear").title = L("clearTip");
   document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
-  try { localStorage.setItem("guide-lang", lang); } catch (e) {}
+  try { localStorage.setItem("site-lang", lang); } catch (e) {}
   if (typeof files !== "undefined") renderFiles();
 }
 const $ = id => document.getElementById(id);
@@ -346,7 +346,7 @@ document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setLang(
 window.setGuideLang = setLang;   // ลิงก์คู่มือบนแถบบนของเว็บรวมเปลี่ยนภาษาหน้านี้ด้วย
 {
   let l = new URLSearchParams(location.search).get("lang");
-  if (!l) { try { l = localStorage.getItem("guide-lang"); } catch (e) {} }
+  if (!l) { try { l = localStorage.getItem("site-lang"); } catch (e) {} }
   setLang(l);
 }
 </script>
