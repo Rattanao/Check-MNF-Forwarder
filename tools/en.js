@@ -98,7 +98,7 @@
     R(`\\(ไม่ระบุ\\)`, "(not given)"),
     R(`ทั้งหมด (\\d+) B/L`, "All $1 B/L"),
     R(`ต้องตรวจ (\\d+)$`, "To check $1"),
-    R(`✔ ผ่าน (\\d+)`, "✔ Pass $1"),
+    R(`✔ ผ่าน (\\d+)`, "✔ Pass $1"), R(`^✔ ผ่าน$`, "✔ Pass"),
     R(`ยอดรวมตรงกัน แต่มีจุดต้องตรวจ:`, "Totals match, but there are points to check:"),
     R(`ยอดรวมตรงกัน`, "Totals match"),
     R(`ยอดรวมไม่ตรง — ตรวจด่วน`, "Totals do not match — check urgently"),

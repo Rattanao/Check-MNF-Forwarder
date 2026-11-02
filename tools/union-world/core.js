@@ -236,6 +236,14 @@
     }
     return /^[A-Z]{3,8}[A-Z0-9]{6,}$/;
   }
+  // คอลัมน์ข้อมูลอื่นก็เลื่อนได้ — MANIFEST บางไฟล์พิมพ์ PKGS/DESC ที่คอลัมน์ 6 (ปกติ 10), กฎ 1)…4) ที่ 11 (ปกติ 15),
+  // KGM/MTQ ที่ 12 (ปกติ 16) — เดาจากข้อมูลจริง ถ้าไม่พบแพทเทิร์นใช้ค่าเดิม
+  function detectCol(rows, re, def) {
+    const counts = {};
+    for (const row of rows) row.forEach((v, idx) => { if (re.test(String(v == null ? "" : v).trim())) counts[idx] = (counts[idx] || 0) + 1; });
+    const k = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a - b)[0];
+    return k === undefined ? def : +k;
+  }
   function detectMarksCol(rows) {
     const counts = {};
     for (const row of rows) row.forEach((v, idx) => { if (/^\d+\.\s*[A-Z]{4}\d{6,7}/.test(String(v == null ? "" : v).trim())) counts[idx] = (counts[idx] || 0) + 1; });
@@ -276,6 +284,8 @@
     const fromPdf = !!rowsIn.fromPdf;
     const rows = rowsIn.map(r => r.map(v => (v === null || v === undefined ? "" : v)));
     const blRe = detectBlPrefix(rows), MARKS_COL = detectMarksCol(rows);
+    const DESC_COL = detectCol(rows, /^[\d,]+\s+[A-Z]{2}\s*\(/, 10), WT_COL = detectCol(rows, /^[\d,]+\.?\d*\s*(KGM|MTQ)$/i, 16),
+      RULE_COL = detectCol(rows, /^[1-4]\)\s*(SHED|ประเทศ|CARGO\s*MOVEMENT|TAX\s*ID)/i, 15);
     const n = rows.length;
     let vessel = "";
     const declared = {};
@@ -313,7 +323,7 @@
     while (i < n) {
       const bl = cell(rows[i], 0);
       if (!blRe.test(bl)) { i++; continue; }
-      const rec = { bl, pkg_hdr: cell(rows[i], 10), gw: cell(rows[i], 16), cons: "", notify: "", cont: [], status: "", meas: "",
+      const rec = { bl, pkg_hdr: cell(rows[i], DESC_COL), gw: cell(rows[i], WT_COL), cons: "", notify: "", cont: [], status: "", meas: "",
         marks: [], desc: [], transit: "", dg: "", reefer: "", port_discharge: pdAt[i], shed_no: "", dest_code_raw: "", movement_raw: "", tax_id_raw: "", no_rule_lines: fromPdf };
       const h5 = cell(rows[i], MARKS_COL);
       if (h5 && !/^\d+\.\s*([A-Z]{4}\d{6,7}|\s*$)/.test(h5)) rec.marks.push(h5);
@@ -322,7 +332,7 @@
       while (j < n) {
         const a = cell(rows[j], 0);
         if (blRe.test(a)) break;
-        if (rows[j].some((_, k) => (k === MARKS_COL || k === 10 ? END_CARGO : END).test(cell(rows[j], k)))) { j++; break; }
+        if (rows[j].some((_, k) => (k === MARKS_COL || k === DESC_COL ? END_CARGO : END).test(cell(rows[j], k)))) { j++; break; }
         const numbered = /^[123]\./.test(a);
         if (a.startsWith("C :")) rec.cons = a.slice(3).trim();
         else if (a.startsWith("N :")) rec.notify = a.slice(3).trim();
@@ -335,11 +345,11 @@
           if (mm) rec.cont.push(mm[1]);
           else if (!/^\d+\.\s*$/.test(c5)) rec.marks.push(c5);
         }
-        for (const cc of [cell(rows[j], MARKS_COL), cell(rows[j], 10)]) {
+        for (const cc of [cell(rows[j], MARKS_COL), cell(rows[j], DESC_COL)]) {
           if (cc && DG_RE.test(cc) && !rec.dg) rec.dg = findDg(cc);
           if (cc && REEFER_RE.test(cc) && !rec.reefer) rec.reefer = findTemp(cc);
         }
-        const c10 = cell(rows[j], 10);
+        const c10 = cell(rows[j], DESC_COL);
         if (c10) {
           const u = c10.toUpperCase();
           if (DG_RE.test(c10) || REEFER_RE.test(c10)) rec.desc.push(c10);
@@ -349,9 +359,9 @@
           else if (/^\d{0,2}[A-Z]\d[A-Z0-9]{1,3}(?:\s|$)/.test(u) || u.includes("PART CNTR") || /^[\d,]+\s*(PK|CS|PX|CT|BX|SX|BE|DR|RO|BG)\b/.test(u)) { /* โครงสร้าง */ }
           else rec.desc.push(c10);
         }
-        const c16 = cell(rows[j], 16);
+        const c16 = cell(rows[j], WT_COL);
         if (c16 && c16.toUpperCase().includes("MTQ") && !rec.meas) rec.meas = c16;
-        const c15 = cell(rows[j], 15);
+        const c15 = cell(rows[j], RULE_COL);
         if (c15) {
           if (c15.startsWith("1)") && !rec.shed_no) { const msh = c15.match(/\d{3,4}/); rec.shed_no = msh ? msh[0] : ""; }
           else if (c15.startsWith("2)") && !rec.dest_code_raw) rec.dest_code_raw = c15;
@@ -415,7 +425,7 @@
       const totY = tot.length ? Math.min(...tot) : null;
       anchors.forEach((a, i) => {
         let yEnd = i + 1 < anchors.length ? anchors[i + 1].y : 1e9;
-        if (totY !== null && a.y < totY && totY < yEnd) yEnd = totY;
+        if (totY !== null && a.y < totY && totY < yEnd) yEnd = totY - 8;   // 'G.W … KGS.' ของแถว TOTAL อยู่สูงกว่าคำ TOTAL
         blocks.push({ bl: a.bl, p, y: a.y, band: lines.filter(l => l.y >= a.y - 2 && l.y < yEnd) });
       });
     });
@@ -455,7 +465,8 @@
         if (/[฀-๿]/.test(status)) status = status.replace(/ҟ/g, "้").replace(/ /g, "");
       }
       // เลขตู้อยู่ระหว่างเลข HB/L กับ STATUS — ต่อบรรทัดก่อน (เลขตู้ถูกตัดกลาง) แล้วค่อยแยกด้วย ','
-      const contTxt = (si >= 0 ? hbl.slice(0, si) : hbl).filter(t => !/UW$|^[A-Z]$/.test(t) || /^[A-Z]{4}\d{6,7}$/.test(t)).join("");
+      const pre = si >= 0 ? hbl.slice(0, si) : hbl, ci = pre.findIndex(t => /^[A-Z]{4}\d/.test(t));
+      const contTxt = ci >= 0 ? pre.slice(ci).join("") : "";
       const conts = contTxt.split(",").map(c => c.trim()).filter(c => /^[A-Z]{4}\d{6,7}$/.test(c));
       const mq = qtyLine.match(QTY_RE);
       const combined = `${marks} ${desc}`;
