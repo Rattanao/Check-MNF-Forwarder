@@ -38,7 +38,9 @@
 bash sync.sh
 ```
 
-แล้ว commit + push · เพิ่ม Forwarder ใหม่: เพิ่มบรรทัดท้าย `sync.sh` และเพิ่มเมนูใน `index.html` (GROUPS)
+**อัตโนมัติ:** GitHub Actions (`.github/workflows/sync.yml`) รัน `sync.sh` ให้ทุกชั่วโมง แก้เวปเจ้าไหนแล้วไม่ต้องบอก เวปรวมจะตามภายใน ~1 ชั่วโมง · อยากให้อัปเดตทันที: GitHub → Actions → Sync tools → Run workflow
+
+รันเองในเครื่องก็ได้ แล้ว commit + push · เพิ่ม Forwarder ใหม่: เพิ่มบรรทัดท้าย `sync.sh` และเพิ่มเมนูใน `index.html` (GROUPS)
 
 ## User ID / Password (สำหรับเจ้าของเว็บ)
 

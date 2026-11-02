@@ -1,0 +1,33 @@
+# ดึงเครื่องมือเวอร์ชันล่าสุดจาก repo ต้นฉบับทุกชั่วโมง (bash sync.sh) แล้ว commit + push ให้เอง ถ้ามีอะไรเปลี่ยน
+# สั่งเองทันที: GitHub -> Actions -> Sync tools -> Run workflow
+name: Sync tools
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [sync.sh, .github/workflows/sync.yml]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-tools
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash sync.sh
+      - name: Commit and push if anything changed
+        run: |
+          git add -A tools
+          if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync tools from their source repos" -m "$(git diff --cached --stat | tail -1)"
+          git push
