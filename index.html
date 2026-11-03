@@ -31,11 +31,13 @@ button { font: inherit; color: inherit; }
 .burger { background: none; border: 0; padding: 8px; cursor: pointer; border-radius: 6px; display: grid; place-items: center; }
 .burger:hover { background: #eef1f8; }
 .burger svg { width: 22px; height: 22px; stroke: var(--blue-dark); }
-.brand { display: flex; align-items: center; gap: 8px; line-height: 1; user-select: none; }
-.brand svg { width: 46px; height: 46px; flex: none; }
-.brand .name { display: grid; gap: 4px; }
-.brand .name b { color: var(--blue); font-size: 22px; font-weight: 700; letter-spacing: -.3px; white-space: nowrap; }
-.brand .name small { color: #222; font-size: 12px; letter-spacing: 3px; white-space: nowrap; }
+/* โลโก้: สีตามโลโก้จริง (น้ำเงิน #1d53a0, ตัวอักษรรองสีดำ) ตัวหนาให้อ่านชัด */
+.brand { display: flex; align-items: center; gap: 10px; line-height: 1; user-select: none; }
+.brand svg { width: 52px; height: 52px; flex: none; }
+.brand .name { display: grid; gap: 2px; justify-items: start; }
+.brand .name b { color: #1d53a0; font-family: "Arial Black", "Arial Bold", Arial, sans-serif; font-size: 23px; font-weight: 900; letter-spacing: -.2px; white-space: nowrap; }
+.brand .name .cjk { color: #000; font-size: 14px; font-weight: 700; letter-spacing: 2.6px; white-space: nowrap; }
+.brand .name small { color: #000; font-family: Arial, sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 1.1px; white-space: nowrap; }
 .top-right { margin-left: auto; align-self: stretch; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 3px; background: var(--blue); padding: 0 26px; }
 .pill { color: #fff; font-weight: 600; font-size: 13px; white-space: nowrap; }
 .guide { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #c9d4f0; white-space: nowrap; }
@@ -79,7 +81,9 @@ body.side-closed .side { margin-left: calc(var(--side-w) * -1); }
   .side { position: fixed; top: var(--top-h); bottom: var(--foot-h); left: 0; z-index: 10; box-shadow: 2px 0 10px rgba(0,0,0,.18); }
   .main { padding: 16px; }
   .crumb { font-size: 20px; margin-bottom: 14px; }
-  .pill, .brand .name small, .guide svg { display: none; }
+  .pill, .brand .name small, .brand .name .cjk, .guide svg { display: none; }
+  .brand svg { width: 42px; height: 42px; }
+  .brand .name b { font-size: 18px; }
   .top-right { padding: 0 10px; }
   .guide { flex-direction: column; align-items: stretch; gap: 3px; font-size: 12px; }
   .guide a { text-align: center; }
@@ -110,19 +114,21 @@ body.locked .layout, body.locked .side, body.locked .guide, body.locked .burger 
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
   </button>
   <div class="brand" aria-label="Heung A Line">
-    <svg viewBox="0 0 48 48" aria-hidden="true">
-      <defs><clipPath id="lc"><circle cx="24" cy="24" r="22"/></clipPath></defs>
-      <circle cx="24" cy="24" r="22" fill="#e2501f"/>
+    <!-- วาดตามโลโก้จริงของ Heung A Line: วงกลมขอบดำ ครึ่งบนแดง + HAL สีเหลือง, ครึ่งล่างแถบน้ำเงิน 3 แถบ -->
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs><clipPath id="lc"><circle cx="50" cy="50" r="47"/></clipPath></defs>
+      <circle cx="50" cy="50" r="47" fill="#fff"/>
       <g clip-path="url(#lc)">
-        <rect x="0" y="29" width="48" height="20" fill="#fff"/>
-        <rect x="0" y="31" width="48" height="3.2" fill="#1f3f94"/>
-        <rect x="0" y="36.4" width="48" height="3.2" fill="#1f3f94"/>
-        <rect x="0" y="41.8" width="48" height="3.2" fill="#1f3f94"/>
+        <rect x="0" y="0" width="100" height="56" fill="#b92e28"/>
+        <rect x="0" y="61" width="100" height="8" fill="#1d53a0"/>
+        <rect x="0" y="75" width="100" height="8" fill="#1d53a0"/>
+        <rect x="0" y="89" width="100" height="8" fill="#1d53a0"/>
       </g>
-      <circle cx="24" cy="24" r="22" fill="none" stroke="#1f3f94" stroke-width="1.5"/>
-      <text x="24" y="24.5" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="15" fill="#f6c443">HAL</text>
+      <circle cx="50" cy="50" r="47" fill="none" stroke="#111" stroke-width="3"/>
+      <text x="50" y="45" text-anchor="middle" font-family="'Times New Roman', Georgia, serif" font-weight="700" font-size="31" letter-spacing=".5"
+        fill="#ffd23a" stroke="#5a1410" stroke-width="1" paint-order="stroke">HAL</text>
     </svg>
-    <div class="name"><b>HEUNG A LINE</b><small>興亞 LINE 株式會社</small></div>
+    <div class="name"><b>HEUNG A LINE</b><span class="cjk">興亞 LINE 株式會社</span><small>Heung A Line Co., Ltd.</small></div>
   </div>
   <div class="top-right">
     <span class="pill">Processed in your browser · No files are uploaded</span>
