@@ -365,30 +365,36 @@
   // pages: [{items:[{x,y,w,t}], annots:[{y,text}]}]  (y วัดจากบนลงล่าง) — ENTER หลายไฟล์ให้ต่อ pages กันมาได้เลย
   function parseEnter(pages, blRe) {
     if (!isShipcoManifest(pages)) return { ENT: {}, declared: {}, notShipco: true };
+    // ไฟล์ ENTER หนึ่งไฟล์อาจรวมหลายเอกสาร (หลายตู้ ต่อกันหลายหน้า และอาจมีสำเนาซ้ำ/ฉบับ REVISED ของเอกสารเดิม):
+    // เลขตู้อยู่หัวหน้าแรกของแต่ละเอกสาร ('CONTAINER NUMBER' + ค่าอยู่บรรทัดถัดลงมาที่ x เดียวกัน) ใช้กับทุกหน้าของเอกสารนั้น
+    // จนกว่าจะเจอหัวเอกสารใหม่ ; ยอดรวมท้ายเอกสารเก็บ "ตู้ละ 1 ครั้ง" (สำเนาซ้ำของตู้เดิมไม่นับซ้ำ)
+    let curCont = "";
+    const docTotals = {};
     const per = pages.map(pg => {
-      let lines = pageLines(pg), totTexts = null;
-      const tot = lines.filter(l => /^TOTAL$/i.test(l.t)).sort((a, b) => a.y - b.y)[0];
-      if (tot) {   // แถวยอดรวมท้ายเอกสาร — เก็บไว้ทำยอดรวมที่เอกสารระบุเอง ไม่ให้ปนเข้าบล็อกสุดท้าย
-        totTexts = lines.filter(l => l.y >= tot.y - ROW_TOL).map(l => l.t);
+      let lines = pageLines(pg);
+      const lbl = lines.find(l => /^CONTAINER NUMBER$/i.test(l.t));
+      if (lbl) {
+        const below = lines.filter(l => Math.abs(l.x - lbl.x) < 5 && l.y > lbl.y).sort((a, b) => a.y - b.y)[0];
+        const m = below ? below.t.match(CONT_RE) : null;
+        curCont = m ? m[0] : "";
+      }
+      // 'TOTAL' ของแถวยอดรวมท้ายเอกสารอยู่คอลัมน์ซ้ายสุดเท่านั้น — คำว่า TOTAL ในคอลัมน์ MARKS ของบล็อกใดบล็อกหนึ่ง
+      // ('TOTAL G.W/T : ... KGS') ต้องไม่ถูกตัดเป็นท้ายเอกสาร ไม่งั้นบล็อกที่เหลือใต้มันหายไปทั้งหมด
+      const tot = lines.filter(l => l.b === 0 && /^TOTAL$/i.test(l.t)).sort((a, b) => a.y - b.y)[0];
+      if (tot) {
+        const foot = lines.filter(l => l.y >= tot.y - ROW_TOL).map(l => l.t), txt = foot.join(" ");
+        const mp = foot.find(t => /^[\d,]+$/.test(t)), mm = txt.match(/([\d,.]+)\s*CBM/i), mg = txt.match(/([\d,.]+)\s*KGS/i);
+        if (mp && mm && mg && !(curCont in docTotals))
+          docTotals[curCont] = { pkg: parseInt(mp.replace(/,/g, ""), 10), gw: parseFloat(mg[1].replace(/,/g, "")), meas: parseFloat(mm[1].replace(/,/g, "")) };
         lines = lines.filter(l => l.y < tot.y - ROW_TOL);
       }
       const anchors = lines.filter(l => l.b === 1 && ANCHOR_RE.test(l.t)).sort((a, b) => a.y - b.y);
-      return { pg, lines, anchors, totTexts };
+      return { pg, lines, anchors, cont: curCont };
     });
-
-    // เลขตู้ระดับเอกสาร (ป้าย CONTAINER NUMBER แล้วค่าอยู่บรรทัดถัดลงมาที่ x เดียวกัน)
-    let masterCont = "";
-    for (const { lines } of per) {
-      const lbl = lines.find(l => /^CONTAINER NUMBER$/i.test(l.t));
-      if (!lbl) continue;
-      const below = lines.filter(l => Math.abs(l.x - lbl.x) < 5 && l.y > lbl.y).sort((a, b) => a.y - b.y)[0];
-      const m = below ? below.t.match(CONT_RE) : null;
-      if (m) { masterCont = m[0]; break; }
-    }
 
     // บล็อก → B/L (ต่อ 2 บรรทัดแรกของคอลัมน์ CUSTOMS BL)
     const blocks = [];
-    per.forEach(({ lines, anchors }, p) => {
+    per.forEach(({ lines, anchors, cont }, p) => {
       anchors.forEach((a, i) => {
         const yEnd = i + 1 < anchors.length ? anchors[i + 1].y - ROW_TOL : Infinity;
         const band = lines.filter(l => l.y >= a.y - ROW_TOL && l.y < yEnd);
@@ -396,7 +402,7 @@
         if (blCol.length < 2) return;
         const bl = (blCol[0].t + blCol[1].t).replace(/\s+/g, "");
         if (!blRe.test(bl)) return;
-        blocks.push({ bl, p, y: a.y, band });
+        blocks.push({ bl, p, y: a.y, band, cont });
       });
     });
 
@@ -408,7 +414,8 @@
       if (DG_RE.test(txt)) r.dg = findDg(txt);
       else if (REEFER_RE.test(txt)) r.reefer = findTemp(txt);
       else if (TRANSIT_RE.test(txt)) r.transit = txt;
-      else r.status = (r.status + " " + txt).trim();
+      else if (/STATUS|CFS|\bCY\b|LCL|FCL|เปิดตู้|ลากตู้|ขน/i.test(txt)) r.status = (r.status + " " + txt).trim();
+      // ข้อความอื่นที่ลูกค้าเขียนทับ ('1', '2', '**REVISED**', '*** as attn') ไม่ใช่ STATUS — ไม่นำมาเทียบ
     };
     const RANGE1 = /^([A-Z0-9]{6,}?)-([A-Z])\s+([\s\S]+)$/, RANGE2 = /^([\s\S]+?)\s+([A-Z0-9]{6,}?)-([A-Z])$/;
     const rangeOf = txt => {
@@ -435,6 +442,7 @@
     const ENT = {};
     for (const blk of blocks) {
       const { band, bl } = blk;
+      if (ENT[bl]) continue;   // สำเนาซ้ำ/ฉบับแก้ไขของ B/L เดิม — ใช้ฉบับแรกที่พบ
       const col = b => band.filter(l => l.b === b);
       const cons = col(0).filter(l => !CONS_LBL_RE.test(l.t)).map(l => l.t).join(" ").trim();
       const marks = col(2).map(l => l.t).join(" ").trim();
@@ -443,7 +451,7 @@
       const pkgtype = pkgDesc[0] || "", desc = pkgDesc.slice(1).join(" ").trim();
       const weightLine = (col(5)[0] || {}).t || "", measLine = (col(6)[0] || {}).t || "";
       const an = annot[bl] || {}, combined = `${marks} ${desc}`;
-      ENT[bl] = { bl, cons, notify: "", cont: masterCont,
+      ENT[bl] = { bl, cons, notify: "", cont: blk.cont,
         pkgs: pkgnum(piecesLine), pkgtype, gw: num(weightLine), meas: num(measLine), marks, desc,
         status_raw: an.status || "", transit_raw: an.transit || (TRANSIT_RE.test(desc) ? desc : ""),
         dg: an.dg || findDg(combined), reefer: an.reefer || findTemp(combined), movement_raw: "" };
@@ -458,15 +466,12 @@
       }
     }
 
-    // ยอดรวมที่เอกสารระบุเอง (ท้ายเอกสาร: 'TOTAL' / '198' / '53.231 CBM' / '16315.030 KGS')
-    const declared = {};
-    const tt = per.map(x => x.totTexts).filter(Boolean).pop();
-    if (tt) {
-      const txt = tt.join(" ");
-      const mp = tt.find(t => /^[\d,]+$/.test(t)), mm = txt.match(/([\d,.]+)\s*CBM/i), mg = txt.match(/([\d,.]+)\s*KGS/i);
-      if (mp) declared.pkg = parseInt(mp.replace(/,/g, ""), 10);
-      if (mg) declared.gw = parseFloat(mg[1].replace(/,/g, ""));
-      if (mm) declared.meas = parseFloat(mm[1].replace(/,/g, ""));
+    // ยอดรวมที่เอกสารระบุเอง (ท้ายเอกสาร: 'TOTAL' / '198' / '53.231 CBM' / '16315.030 KGS') รวมทุกตู้ในไฟล์ (ตู้ละ 1 ครั้ง)
+    const declared = {}, tots = Object.values(docTotals);
+    if (tots.length) {
+      declared.pkg = tots.reduce((s, t) => s + t.pkg, 0);
+      declared.gw = Math.round(tots.reduce((s, t) => s + t.gw, 0) * 1000) / 1000;
+      declared.meas = Math.round(tots.reduce((s, t) => s + t.meas, 0) * 1000) / 1000;
     }
     return { ENT, declared };
   }
