@@ -468,7 +468,8 @@
     let issueRows = 0;
     const TOT = { pe: 0, pm: 0, ge: 0, gm: 0, me: 0, mm: 0, pke: {}, pkm: {}, cte: {}, ctm: {}, st_bad: 0, transit: 0, dg: 0, reefer: 0,
       shed_bad: 0, dest_bad: 0, mv_bad: 0, mv_review: 0, tax_bad: 0 };
-    const sub = Object.keys(MAN).sort(blSort);
+    const skippedMf = Object.keys(MAN).filter(bl => !ENT[bl]).length;   // B/L ของ M/F ที่ไม่มีใน ENTER — ไม่ลงผล
+    const sub = Object.keys(MAN).filter(bl => ENT[bl]).sort(blSort);
     const mkCell = (v, s, bad) => ({ v: v === null || v === undefined ? "" : v, s: s || "ok", bad: !!bad });
 
     for (const bl of sub) {
@@ -674,6 +675,7 @@
     if (entDecl && Object.keys(entDecl).length) dbits.push("ENTER: " + dtxt(entDecl));
     if (manDecl && Object.keys(manDecl).length) dbits.push("MANIFEST(GRAND TOTAL): " + dtxt(manDecl));
     const declTxt = dbits.length ? "ยอดที่ระบุในเอกสาร — " + dbits.join("  |  ") + "  ||  " : "";
+    const skipTxt = skippedMf ? `ไม่แสดง B/L ของ MANIFEST ที่ไม่มีใน ENTER ${skippedMf} B/L  ||  ` : "";
     const T = {
       urgent: allOk ? `${OK} ยอดรวม ENTER = MANIFEST` : `${WARN} ยอดรวมไม่ตรง — ตรวจด่วน`, bl: "TOTAL / ยอดรวม",
       cneeE: `${na} B/L ย่อย`, cneeM: `${na} B/L ย่อย`, tax: `TAX ID ไม่ตรง ${TOT.tax_bad} B/L`,
@@ -683,7 +685,7 @@
       gwE: fmt3(TOT.ge), gwM: fmt3(TOT.gm), meE: fmt3(TOT.me), meM: fmt3(TOT.mm),
       mkE: "", mkM: "", dsE: "", dsM: "", reefer: `${TOT.reefer} B/L`, dg: `${TOT.dg} B/L`, transit: `${TOT.transit} B/L`,
       shed: `SHED ไม่ตรง ${TOT.shed_bad} B/L`, dest: `ปลายทางไม่ตรง ${TOT.dest_bad} B/L`, mv: `MOVEMENT ไม่ตรง ${TOT.mv_bad} / ต้องตรวจ ${TOT.mv_review} B/L`,
-      note: declTxt + `ตรวจยอดรวมจากรายการข้างบน: PACKAGE ${peOk ? "ตรง" : "ไม่ตรง"}, GROSS WEIGHT ${geOk ? "ตรง" : "ไม่ตรง"}, MEASUREMENT ${meOk ? "ตรง" : "ไม่ตรง"}` };
+      note: skipTxt + declTxt + `ตรวจยอดรวมจากรายการข้างบน: PACKAGE ${peOk ? "ตรง" : "ไม่ตรง"}, GROSS WEIGHT ${geOk ? "ตรง" : "ไม่ตรง"}, MEASUREMENT ${meOk ? "ตรง" : "ไม่ตรง"}` };
     const bad = {};
     if (!peOk) bad.tpE = bad.tpM = 1; if (!geOk) bad.gwE = bad.gwM = 1; if (!meOk) bad.meE = bad.meM = 1;
     if (TOT.st_bad) bad.stE = bad.stM = 1;
