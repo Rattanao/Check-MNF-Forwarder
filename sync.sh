@@ -35,6 +35,7 @@ handle-inter Handle-inter
 lx-pantos LX-Pantos
 m-corp M-CORP
 mac-nels MAC-NELS
+orca Orca
 penanshin Penanshin
 planet Planet
 quality check-edi-Quality

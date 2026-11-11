@@ -1,7 +1,7 @@
 /* CHECK EDI ORCA — ตรรกะตรวจ MANIFEST (.xls/.xlsx หรือ PDF "CARGO MANIFEST") เทียบ ENTER (.pdf จดหมาย
    แก้ MANIFEST ของ ORCA FORWARD: B/L NO. / CONTR. / MARKS AND NOS. / NO.OF P'KGS / DESCRIPTION OF GOODS)
    ทำงานในเบราว์เซอร์ล้วน ๆ ไม่มีการอัปโหลด — ฐานเดียวกับ Check EDI Sinotrans ต่างกันที่ตัวอ่าน ENTER
-   ไฟล์นี้อยู่ในเว็บรวม Check-MNF-Forwarder โดยตรง (ไม่มี repo ต้นฉบับ, sync.sh ไม่แตะ) */
+   ต้นฉบับอยู่ที่ github.com/Rattanao/Orca (docs/) — เว็บรวม Check-MNF-Forwarder ดึงไปเองด้วย sync.sh */
 (function (root) {
   "use strict";
 

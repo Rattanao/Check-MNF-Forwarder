@@ -20,7 +20,7 @@
 | LX Pantos | [LX-Pantos](https://github.com/Rattanao/LX-Pantos) |
 | M-CORP | [M-CORP](https://github.com/Rattanao/M-CORP) |
 | MAC-NELS | [MAC-NELS](https://github.com/Rattanao/MAC-NELS) |
-| Orca | อยู่ในเว็บรวมนี้โดยตรง (`tools/orca/` — ไม่มี repo ต้นฉบับ, `sync.sh` ไม่แตะ แก้ที่นี่ได้เลย) |
+| Orca | [Orca](https://github.com/Rattanao/Orca) |
 | Penanshin | [Penanshin](https://github.com/Rattanao/Penanshin) |
 | Planet | [Planet](https://github.com/Rattanao/Planet) |
 | Quality | [check-edi-Quality](https://github.com/Rattanao/check-edi-Quality) |
