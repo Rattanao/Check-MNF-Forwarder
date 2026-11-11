@@ -85,6 +85,7 @@
     R(`ถ้าถูกต้องตามกฎจะแสดง`, "show this when correct:"),
     R(`ข้อจำกัด:`, "Limits:"),
     R(`ไฟล์ถูกประมวลผลในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด`, "Files are processed only in your browser — nothing is uploaded anywhere"),
+    R(`แสดงผลเฉพาะ B/L ที่มีใน ENTER \\(B/L อื่นของ MANIFEST ทั้งลำเรือไม่แสดง\\)`, "only B/Ls that are in the ENTER are reported (other B/Ls of a whole-vessel MANIFEST are not shown)"),
     R(`= วิกฤต`, "= critical"),
 
     // ---- ผลตรวจ ----
