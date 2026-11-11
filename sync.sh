@@ -2,7 +2,7 @@
 # ดึงเครื่องมือเวอร์ชันล่าสุดจาก repo ต้นฉบับมาไว้ใน tools/<ชื่อ>/
 # ใช้: bash sync.sh   (ต้องมี git) แล้ว commit + push
 # เพิ่มเครื่องมือใหม่: เพิ่มบรรทัด "<ชื่อโฟลเดอร์> <repo>" ด้านล่าง, เพิ่มเมนูใน index.html (GROUPS)
-#   ชื่อไฟล์ดาวน์โหลดใน tools/embed.js (NAMES) และรายชื่อใน tools/all/index.html (TOOLS)
+#   และชื่อไฟล์ดาวน์โหลดใน tools/embed.js (NAMES)
 set -e
 cd "$(dirname "$0")"
 tmp=$(mktemp -d)

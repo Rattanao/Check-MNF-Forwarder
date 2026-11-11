@@ -177,13 +177,9 @@ const ICON = {
   cut:   '<circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8 8.5L20 17M8 15.5L20 7"/>',
   temp:  '<path d="M10 14V5a2 2 0 014 0v9a4 4 0 11-4 0z"/><path d="M12 10v6"/>',
   doc:   '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
-  all:   '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5l2.5 2.5 4.5-5"/>',
   book:  '<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5M8 7h8M8 11h6"/>'
 };
 const GROUPS = [
-  { name: "Check all Amend", tools: [
-    { id: "all", title: "Check all files", desc: "Add a MANIFEST / ENTER from any forwarder — the page finds whose form it is and checks it with that forwarder's rules → EDI &lt;Forwarder&gt;.xlsx", src: "tools/all/index.html", icon: "all" }
-  ]},
   { name: "Check EDI by forwarder", tools: [
     { id: "able",      title: "Check EDI Able",      desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (Able form) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
     { id: "agn",       title: "Check EDI AGN",       desc: "Compare the MANIFEST with the ENTER (AGN AMENDMENT) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },
@@ -223,7 +219,7 @@ $("guideIcon").innerHTML = ICON.book;
 // guide links under "No files are uploaded": pick the language and open the guide (saved in localStorage "site-lang")
 document.querySelectorAll(".guide a").forEach(a => a.addEventListener("click", () => {
   try { localStorage.setItem("site-lang", a.dataset.lang); } catch (e) {}
-  // คู่มือและหน้า Check all files ที่เปิดอยู่เปลี่ยนภาษาตาม
+  // คู่มือที่เปิดอยู่เปลี่ยนภาษาตาม
   document.querySelectorAll("#card iframe").forEach(f => { try { f.contentWindow.setGuideLang && f.contentWindow.setGuideLang(a.dataset.lang); } catch (e) {} });
   setTimeout(show);
 }));
