@@ -211,7 +211,8 @@
     for (const row of rows) {
       const v = row && row[0];
       if (typeof v === "number" || v == null) continue;
-      const m = String(v).trim().match(/^([A-Z]{3,8})[A-Z0-9]{5,}$/);
+      // ตัวอักษรนำต้องตามด้วยตัวเลขทันที — ชื่อบริษัทที่ตัดบรรทัดมาคอลัมน์ 0 ('PARTNERSHIP') เคยทำ prefix ร่วมพัง เหลือแค่ HASLK
+      const m = String(v).trim().match(/^([A-Z]{3,8})\d[A-Z0-9]{4,}$/);
       if (m) cand.push(m[1]);
     }
     if (cand.length) {
@@ -305,7 +306,7 @@
           if (DG_RE.test(c10) || REEFER_RE.test(c10)) rec.desc.push(c10);
           else if (transitOpen || TRANSIT_RE.test(u)) { rec.transit = (rec.transit + " " + c10).trim(); transitOpen = true; rec.desc.push(c10); }
           else if (ST_TOK.includes(u) && !rec.status) rec.status = c10;
-          else if (/^\d{0,2}[A-Z]\d[A-Z0-9]{1,3}(?:\s|$)/.test(u) || u.includes("PART CNTR") || /^[\d,]+\s*(PK|CS|PX|CT|BX|SX|BE|DR|RO|BG)\b/.test(u)) { /* โครงสร้าง */ }
+          else if (/^\d{2}[A-Z]\d[A-Z0-9]{1,3}(?:\s|$)/.test(u) || u.includes("PART CNTR") || /^[\d,]+\s*(PK|CS|PX|CT|BX|SX|BE|DR|RO|BG)\b/.test(u)) { /* โครงสร้าง */ }
           else rec.desc.push(c10);
         }
         const c16 = cell(rows[j], 16);
@@ -388,44 +389,37 @@
         if (txt.length > 1) docStatus.push(txt);
       }
     }
-    const globalStatus = docStatus.join(" ");
-
-    const ENT = {};
-    let nAnchor = 0;
+    const ENT = {}, blockAnnot = {};
+    const NUM_KG = /^([\d,.]+)\s*(KGS?|KGM)\.?$/i, NUM_M3 = /^([\d,.]+)\s*(M3|CBM|MTQ)\.?$/i;
+    let nAnchor = 0, carry = [];
     pages.forEach(pg => {
       // FreeText ที่ pdfPages ใส่ไว้เป็น item ด้วย ไม่ใช่เนื้อหาตาราง — ตัดออกก่อน แล้วผูก annotation แยก
-      const rows = toRows(noAnnot(pg));
-      const hdr = rows.find(r => HDR_RE.test(r.t));
-      if (!hdr) return;
+      const allRows = toRows(noAnnot(pg));
+      const hdr = allRows.find(r => HDR_RE.test(r.t));
+      if (!hdr) { carry = []; return; }
       const hit = re => (hdr.items.find(i => re.test(i.t)) || {}).x;
       const pkgX = hit(/^NO OF PACK/i) ?? 225, descX = hit(/^DESCRIPTION/i) ?? 380;
-      const crow = rows.find(r => /^Container\s*No\b/i.test(r.t));
+      const crow = allRows.find(r => /^Container\s*No\b/i.test(r.t));
       const cm = crow ? crow.t.match(CONT_RE) : null;
       const cont = cm ? cm[0] : "";
+      // บล็อกที่แถวสินค้าค้างท้ายหน้าก่อน ('CONTINUE NEXT PAGE') ยกมาต่อหน้าบล็อกแรกของหน้านี้
+      const rows = carry.concat(allRows.filter(r => r.y > hdr.y + 3));
+      carry = [];
       const anchors = rows.filter(r => BLROW_RE.test(r.t));
       const blOf = r => (r.t.match(BLROW_RE)[1] || "").toUpperCase();
+      const annots = (pg.annots || []).map(a => ({ y: a.y, t: (a.text || "").replace(/\s+/g, " ").trim() })).filter(a => a.t.length > 1);
 
-      // FreeText บนหน้าตาราง ผูกกับแถว B/L แรกที่อยู่ใต้ annotation (เลข B/L พิมพ์ท้ายบล็อกสินค้าของตัวเอง)
-      const pageAnnot = {};
-      for (const a of pg.annots || []) {
-        const txt = (a.text || "").replace(/\s+/g, " ").trim();
-        if (txt.length <= 1 || !anchors.length) continue;
-        const tgt = anchors.find(r => r.y > a.y - 5) || anchors[anchors.length - 1];
-        const r = pageAnnot[blOf(tgt)] = pageAnnot[blOf(tgt)] || {};
-        if (DG_RE.test(txt)) r.dg = findDg(txt);
-        else if (REEFER_RE.test(txt)) r.reefer = findTemp(txt);
-        else if (TRANSIT_RE.test(txt)) r.transit = txt;
-        else r.status = `${r.status || ""} ${txt}`.trim();
-      }
-
-      let start = hdr.y + 3;
+      let start = -Infinity, lastSep = -Infinity;
       for (const br of anchors) {
         nAnchor++;
         const bl = blOf(br);
         const sep = rows.find(r => r.y > br.y && SEP_RE.test(r.t));
         const sepY = sep ? sep.y : br.y + 40;
         const body = rows.filter(r => r.y > start && r.y < br.y - 2 && !SEP_RE.test(r.t)).flatMap(r => r.items);
-        start = sepY + 2;
+        const blkStart = start;
+        start = sepY + 2; lastSep = sepY;
+        // FreeText ในช่วงบล็อกนี้ (เส้นคั่นก่อนหน้า → เส้นคั่นของบล็อกเอง) เป็นของ B/L นี้ เช่นน้ำหนักแก้สีแดง '70.915 KG'
+        (blockAnnot[bl] = blockAnnot[bl] || []).push(...annots.filter(a => a.y > blkStart && a.y < sepY).map(a => a.t));
         if (!blRe.test(bl)) continue;
         const tail = rows.filter(r => r.y > br.y + 2 && r.y < sepY - 2);
         const consRow = tail.find(r => /^CONSIGNEE\b/i.test(r.t));
@@ -438,15 +432,34 @@
         let desc = col(descX - 5, Infinity).join(" ").trim();
         const qm = qty.match(QTY_RE);
         if (qm && qm[3]) desc = `${qm[3]} ${desc}`.trim();
-        const pa = pageAnnot[bl] || {};
-        const combined = `${marks} ${desc}`.trim();
         ENT[bl] = { bl, cons, cont, pkgs: qm ? parseInt(qm[1].replace(/,/g, ""), 10) : null, pkgtype: qm ? qm[2] : "",
-          gw: gwM ? num(gwM[1]) : null, meas: meM ? num(meM[1]) : null, marks, desc,
-          status_raw: pa.status || globalStatus,
-          transit_raw: pa.transit || (TRANSIT_RE.test(combined) ? combined : ""),
-          dg: pa.dg || findDg(combined), reefer: pa.reefer || findTemp(combined), movement_raw: "" };
+          gw: gwM ? num(gwM[1]) : null, meas: meM ? num(meM[1]) : null, marks, desc, movement_raw: "" };
       }
+      // FreeText ใต้เส้นคั่นสุดท้ายของหน้า (ข้างยอด Total) = ของทั้งฉบับ: ข้อความเข้า STATUS ทุก B/L, ตัวเลขยอดรวมไม่ใช่ของ B/L ใด
+      for (const a of annots)
+        if (a.y > lastSep && !NUM_KG.test(a.t) && !NUM_M3.test(a.t) && !docStatus.includes(a.t)) docStatus.push(a.t);
+      // แถวที่เหลือหลังเส้นคั่นสุดท้ายยกไปหน้าถัดไป — ยกเว้นหน้าที่มียอด Total แล้ว
+      if (!rows.some(r => /^Total\s+Packages/i.test(r.t)))
+        carry = rows.filter(r => r.y > lastSep + 2 && !/^CONTINUE\s+NEXT\s+PAGE/i.test(r.t)).map(r => ({ ...r, y: r.y - 5000 }));
     });
+
+    const globalStatus = docStatus.join(" ");
+    for (const [bl, r] of Object.entries(ENT)) {
+      const pa = {};
+      for (const t of blockAnnot[bl] || []) {
+        const mw = t.match(NUM_KG), mv = t.match(NUM_M3);
+        if (mw) r.gw = num(mw[1]);          // น้ำหนักที่ลูกค้าแก้ด้วยสีแดง ทับค่าที่พิมพ์ไว้
+        else if (mv) r.meas = num(mv[1]);
+        else if (DG_RE.test(t)) pa.dg = findDg(t);
+        else if (REEFER_RE.test(t)) pa.reefer = findTemp(t);
+        else if (TRANSIT_RE.test(t)) pa.transit = t;
+        else pa.status = `${pa.status || ""} ${t}`.trim();
+      }
+      const combined = `${r.marks} ${r.desc}`.trim();
+      Object.assign(r, { status_raw: pa.status || globalStatus,
+        transit_raw: pa.transit || (TRANSIT_RE.test(combined) ? combined : ""),
+        dg: pa.dg || findDg(combined), reefer: pa.reefer || findTemp(combined) });
+    }
 
     const success = Object.keys(ENT).length;
     const trusted = success >= 1 && nAnchor > 0 && success / nAnchor >= 0.5;
@@ -693,7 +706,8 @@
     const dbits = [];
     const dtxt = d => ["pkg", "gw", "meas"].filter(k => k in d).map(k => (k === "pkg" ? String(d[k]) : fmt3(d[k]))).join(" / ");
     if (entDecl && Object.keys(entDecl).length) dbits.push("ENTER: " + dtxt(entDecl));
-    if (manDecl && Object.keys(manDecl).length) dbits.push("MANIFEST(GRAND TOTAL): " + dtxt(manDecl));
+    // GRAND TOTAL ของ M/F เป็นยอดทั้งลำ — ไม่ใช้เมื่อแสดงเฉพาะ B/L ที่มีใน ENTER (เหมือน build_edi.py)
+    if (manDecl && Object.keys(manDecl).length && !skippedMf) dbits.push("MANIFEST(GRAND TOTAL): " + dtxt(manDecl));
     const declTxt = dbits.length ? "ยอดที่ระบุในเอกสาร — " + dbits.join("  |  ") + "  ||  " : "";
     const skipTxt = skippedMf ? `ไม่แสดง B/L ของ MANIFEST ที่ไม่มีใน ENTER ${skippedMf} B/L  ||  ` : "";
     // totals equal but other flags (TRANSIT/DG/...) — say what it is instead of "ยอดรวมไม่ตรง"
@@ -763,7 +777,8 @@
           cur.w = it.x + it.w - cur.x;
         } else { cur = { x: it.x, y: it.y, w: it.w, t: it.t }; items.push(cur); }
       }
-      items.forEach(i => { i.t = i.t.replace(/\s+/g, " ").trim(); });
+      // อักขระควบคุม (\x1f ฯลฯ) ที่ pdf.js คืนมาท้ายข้อความ = ช่องว่าง เหมือน _clean_get_text ของ build_edi.py
+      items.forEach(i => { i.t = i.t.replace(/[\x00-\x1f\x7f]/g, " ").replace(/\s+/g, " ").trim(); });
       const annots = [];
       try {
         for (const a of await page.getAnnotations()) {
