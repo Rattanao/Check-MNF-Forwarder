@@ -32,6 +32,7 @@ eastern-air Eastern-Air
 freight-links Freight-links
 gateway Gateway
 handle-inter Handle-inter
+leo-global Leo-Globa
 lx-pantos LX-Pantos
 m-corp M-CORP
 mac-nels MAC-NELS
