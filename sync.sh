@@ -35,6 +35,7 @@ handle-inter Handle-inter
 leo-global Leo-Globa
 lx-pantos LX-Pantos
 m-corp M-CORP
+m-inter M-INTER
 mac-nels MAC-NELS
 orca Orca
 penanshin Penanshin

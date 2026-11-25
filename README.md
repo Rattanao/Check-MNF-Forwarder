@@ -1,6 +1,6 @@
 # Check MNF Forwarder
 
-รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 20 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
+รวมเครื่องมือตรวจเทียบ MANIFEST กับ ENTER ของ Forwarder ทั้ง 21 รายไว้ในเว็บเดียว (รูปแบบเดียวกับ [WWW-HAL](https://rattanao.github.io/WWW-HAL/))
 
 เปิดใช้งาน: https://rattanao.github.io/Check-MNF-Forwarder/ · คู่มือ (ไทย / English): ลิงก์ใต้ "No files are uploaded" มุมขวาบน หรือ https://rattanao.github.io/Check-MNF-Forwarder/#guide
 
@@ -20,6 +20,7 @@
 | Leo Global | [Leo-Globa](https://github.com/Rattanao/Leo-Globa) |
 | LX Pantos | [LX-Pantos](https://github.com/Rattanao/LX-Pantos) |
 | M-CORP | [M-CORP](https://github.com/Rattanao/M-CORP) |
+| M INTER | [M-INTER](https://github.com/Rattanao/M-INTER) |
 | MAC-NELS | [MAC-NELS](https://github.com/Rattanao/MAC-NELS) |
 | Orca | [Orca](https://github.com/Rattanao/Orca) |
 | Penanshin | [Penanshin](https://github.com/Rattanao/Penanshin) |
