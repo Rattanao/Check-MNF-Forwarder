@@ -194,6 +194,13 @@
     const mv = s => String(s || "").toUpperCase().replace(/\*?\s*CARGO\s*MOVEMENT\s*[:=]?\s*[0-9A-Z][0-9A-Z\-]*\s*\*?/g, " ");
     const na = mv(a).replace(/[^A-Z0-9]/g, ""), nb = mv(b).replace(/[^A-Z0-9]/g, "");
     if (!na && !nb) return null;
+    // กฎผู้ใช้ (2026-11-25): MANIFEST '<ข้อความ> *AS PER ATTACHED SHEET*' — ตรวจแค่ 30 ตัวอักษรแรกก่อนคำนี้
+    // (ไม่นับช่องว่าง/เครื่องหมาย) ถ้าตรงกับต้นข้อความ ENTER ถือว่าตรง ไม่ต้องเตือน (ส่วนที่เหลืออยู่ใน ATTACHED SHEET)
+    const att = String(b || "").toUpperCase().search(/\*?\s*AS\s*PER\s*ATTA\s*CHED\s*SHEETS?\b/);
+    if (att >= 0) {
+      const pre = String(b).slice(0, att).toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 30);
+      if (pre && na.startsWith(pre)) return true;
+    }
     return na === nb;
   }
   const fmt3 = x => x.toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 });

@@ -66,6 +66,7 @@
     R(`: CY/CY-CY/FCL/ลากตู้ =`, ": CY/CY-CY/FCL/ลากตู้ (haul container) ="),
     R(`, LCL/ขน =`, ", LCL/ขน (carry) ="),
     R(`, CFS/LCL-CFS/เปิดตู้ =`, ", CFS/LCL-CFS/เปิดตู้ (unstuff) ="),
+    R(`ยกเว้น MANIFEST มี \\*AS PER ATTACHED SHEET\\* ตรวจแค่ 30 ตัวอักษรแรกก่อนคำนี้`, "except when the MANIFEST has *AS PER ATTACHED SHEET*: only the first 30 letters before it are checked"),
     R(`เทียบเข้ม \\(ตัดแค่ช่องว่าง/วรรคตอน\\)`, "compared strictly (only spaces/punctuation ignored)"),
     R(`พบฝั่งใดก็เตือนเสมอ`, "always flagged when found on either side"),
     R(`STATUS อ่านจากบรรทัด`, "STATUS is read from the line"),

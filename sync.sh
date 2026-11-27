@@ -17,6 +17,7 @@ while read -r id repo; do
     cp -r "$src"/. "tools/$id/"        # docs/ ทั้งโฟลเดอร์ (core.js, โลโก้, assets/)
   else
     cp "$src/core.js" "tools/$id/core.js"   # repo ที่วางเวปไว้ที่ root (Cargoport)
+    [ -d "$src/assets" ] && cp -r "$src/assets" "tools/$id/assets"   # โลโก้
   fi
   # เพิ่ม embed.js ต่อจาก <title> (ซ่อนหัว/ท้าย, จำโฟลเดอร์บันทึก, ปุ่มลบไฟล์)
   sed 's#^\(<title>.*</title>\)\r\{0,1\}$#\1\n<script src="../embed.js"></script>#' "$src/index.html" > "tools/$id/index.html"
