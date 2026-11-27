@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check EDI Various Forms</title>
+<script src="../embed.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1f3864; --navy-soft: #d9e1f2; --bg: #f3f5f9; --card: #ffffff;
+    --text: #1d2433; --muted: #5b6474; --line: #d5dae3; --stripe: #f7f9fc;
+    --red: #c00000; --red-bg: #fdd7d7; --green: #006100; --green-bg: #c6efce; --yellow: #fff2cc; --orange: #fce4d6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Sarabun", Tahoma, sans-serif; background: var(--bg); color: var(--text); }
+  header { background: var(--navy); color: #fff; padding: 18px 16px; }
+  header .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header .logo { background: #fff; border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; }
+  header .logo img { display: block; height: 44px; width: auto; }
+  header h1 { margin: 0; font-size: 26px; letter-spacing: 1px; }
+  header p { margin: 0; opacity: .8; font-size: 15px; }
+  header .by { margin-left: auto; align-self: center; text-align: right; font-size: 13px; line-height: 1.5; opacity: .9; }
+  @media (max-width: 720px) { header .by { margin-left: 0; text-align: left; } }
+  .wrap { max-width: 1400px; margin: 0 auto; }
+  main { padding: 20px 16px 40px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-bottom: 18px; }
+  .top { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
+  @media (max-width: 720px) { .top { grid-template-columns: 1fr; } }
+  label.t { display: block; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .drop { border: 2px dashed #9aa8c3; border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; background: #fafbfd; transition: .15s; }
+  .drop.over { background: var(--navy-soft); border-color: var(--navy); }
+  .drop b { color: var(--navy); }
+  button { font: inherit; font-weight: 600; font-size: 16px; border: 0; border-radius: 8px; padding: 12px 22px; cursor: pointer; background: var(--navy); color: #fff; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  .files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .file { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 6px 5px 12px; font-size: 14px; }
+  .file .k { font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; }
+  .file .k.MANIFEST { background: var(--navy-soft); color: var(--navy); }
+  .file .k.ENTER { background: #fff2cc; color: #7f6000; }
+  .file .k.NONE { background: var(--red-bg); color: var(--red); }
+  .file .x { cursor: pointer; border: 0; background: #eef0f5; color: var(--muted); border-radius: 50%; width: 22px; height: 22px; padding: 0; font-size: 13px; line-height: 22px; }
+  .opt { margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .opt input[type=text] { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; width: 110px; }
+  .opt label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; color: var(--text); }
+  .rules { font-size: 14px; color: var(--muted); margin: 14px 0 0; line-height: 1.7; }
+  .rules code { background: var(--navy-soft); color: var(--navy); padding: 1px 6px; border-radius: 4px; }
+  .msg { color: var(--red); font-weight: 600; margin-top: 10px; white-space: pre-line; }
+  .prog { margin-top: 12px; }
+  .prog .st { font-weight: 600; color: var(--navy); }
+  .bar { height: 8px; background: var(--navy-soft); border-radius: 6px; overflow: hidden; margin-top: 6px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--navy); transition: width .3s; }
+  .info { display: flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .info div { padding: 8px 14px; border-right: 1px solid var(--line); }
+  .info .k { background: var(--navy-soft); color: var(--navy); font-weight: 700; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip { border-radius: 999px; padding: 6px 14px; font-weight: 700; border: 1px solid rgba(0,0,0,.08); }
+  .chip.bad { background: var(--red-bg); color: var(--red); }
+  .chip.warn { background: var(--orange); color: #9c0006; }
+  .chip.ok { background: var(--green-bg); color: var(--green); }
+  .chip.all { background: var(--navy-soft); color: var(--navy); }
+  .legend { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border: 1px solid #bbb; vertical-align: -1px; margin: 0 4px 0 10px; }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .toolbar input[type=search] { font: inherit; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; min-width: 240px; flex: 1; }
+  .toolbar label { display: flex; gap: 6px; align-items: center; cursor: pointer; user-select: none; }
+  .tbl { overflow: auto; max-height: 72vh; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; }
+  th { background: var(--navy); color: #fff; padding: 9px 8px; position: sticky; top: 0; z-index: 3; white-space: nowrap; }
+  td { padding: 6px 10px; border-top: 1px solid var(--line); border-right: 1px solid #eef0f5; text-align: left; background: #fff; vertical-align: top; min-width: 90px; max-width: 320px; white-space: pre-line; }
+  td.r { text-align: right; white-space: nowrap; }
+  td.wide { min-width: 260px; }
+  td.diff { background: var(--red-bg) !important; color: #9c0006; font-weight: 700; }
+  td.warn { background: var(--orange) !important; color: #9c0006; font-weight: 700; }
+  td.yel { background: var(--yellow) !important; }
+  td.grn { background: var(--green-bg) !important; color: var(--green); font-weight: 700; }
+  td.navy { background: var(--navy) !important; color: #fff; font-weight: 700; }
+  td.bad { font-weight: 700; color: #b00000; }
+  tr.total td { border-top: 3px solid var(--navy); font-weight: 700; }
+  th.s0, td.s0 { position: sticky; left: 0; z-index: 2; min-width: 150px; max-width: 150px; }
+  th.s1, td.s1 { position: sticky; left: 150px; z-index: 2; min-width: 140px; box-shadow: 2px 0 0 var(--line); }
+  th.s0, th.s1 { z-index: 4; }
+  details.log { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  details.log pre { white-space: pre-wrap; background: var(--stripe); border: 1px solid var(--line); border-radius: 8px; padding: 10px; max-height: 320px; overflow: auto; }
+  .hidden { display: none; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding-bottom: 24px; }
+  footer a { color: var(--navy); }
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo"><img src="app/hal-logo.png" alt="Heung A Line Co., Ltd." width="224" height="55"></span><h1>CHECK EDI VARIOUS FORMS</h1><p>ตรวจเทียบ MANIFEST กับ ENTER ชุดรวมหลายฟอร์ม (PDF ไฟล์เดียว): CONSIGNEE · CNTR · STATUS · PKG · G.W. · MEAS. · MARKS · DESC · DG · REEFER · TRANSIT</p><div class="by">Project by Ms. Rattana Mudlae<br>Position Import DOC.</div></div></header>
+
+<main class="wrap">
+  <section class="card">
+    <div class="top">
+      <div>
+        <label class="t">ไฟล์ MANIFEST (.xls / .xlsx / MF .pdf) และ ENTER ชุดรวม (.pdf ไฟล์เดียว)</label>
+        <div class="drop" id="drop"><span>ลากไฟล์มาวางพร้อมกัน หรือ <b>คลิกเพื่อเลือกไฟล์</b></span></div>
+        <input type="file" id="file" accept=".xls,.xlsx,.pdf" multiple class="hidden">
+        <div class="files" id="files"></div>
+      </div>
+      <button id="run" disabled>ตรวจสอบ</button>
+    </div>
+    <p class="rules">
+      แยกประเภทไฟล์ให้เองจากนามสกุล (ตั้งชื่ออะไรก็ได้) · .xls/.xlsx = MANIFEST, .pdf = ENTER (MF แบบ PDF ให้ตั้งชื่อขึ้นต้น MF หรือ MANIFEST) ·
+      แยก ENTER ทีละหน้า แล้วอ่านด้วยตัวอ่านของแต่ละฟอร์ม (ARRIVAL NOTICE, จดหมายแก้ไขของ forwarder หลายสิบแบบ, Sinotrans / LX Pantos / Shipco / Planet / Union World / AGN / Handle / Able / Quality / MAC-NELS / CMS / M INTER / DSV / LEO GLOBAL / KUEHNE + NAGEL ฯลฯ) ·
+      <b>STATUS</b>: CY/CY-CY/FCL/ลากตู้ = <code>CY</code>, LCL/ขน = <code>LCL</code>, CFS/LCL-CFS/เปิดตู้ = <code>LCL/CFS</code> ·
+      <b>WOODEN CASE ≠ CASE</b> · ก่อน <b>AS PER ATTACHED SHEET</b> ตรวจ 30 ตัวอักษรแรก · กรอบสีแดงของลูกค้า = ตรวจเฉพาะในกรอบ ·
+      <b>DG</b> UN/CLASS ตรงกัน = ไม่เตือน · <b>REEFER</b> TEMP ตรงกัน = ไม่เตือน แต่ MF ไม่มี VENT = เตือน · <b>TRANSIT</b> / ประเทศปลายทาง / CARGO MOVEMENT / TAX ID ถูกต้องตามกฎ = <code>-</code> · <b>ไม่ตรวจ SHED</b> · แสดงทุก B/L ของ MF เรียงตาม MF — <b>ไม่มี ENTER = ช่อง B/L NO. สีเหลือง</b> · <b>B/L ที่มีใน ENTER แต่ไม่มีใน MANIFEST</b> = วิกฤต ·
+      หน้าที่เป็นภาพสแกนอ่านด้วย OCR = สีส้ม ตรวจด้วยตา<br>
+      ไฟล์ถูกประมวลผลในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการอัปโหลดไปที่ใด · ครั้งแรกต้องโหลดตัวประมวลผล (~40 MB) ใช้เวลาสักครู่
+    </p>
+    <div class="prog hidden" id="prog"><span class="st" id="status"></span><div class="bar"><i id="bar"></i></div></div>
+    <div class="msg" id="msg"></div>
+  </section>
+
+  <section class="card hidden" id="result">
+    <div class="info" id="info"></div>
+    <div class="chips" id="chips"></div>
+    <div class="legend">สี: <i style="background:#fff"></i>ไม่ผิด <i style="background:#c6efce"></i>ผ่าน <i style="background:#fdd7d7"></i>ไม่ตรง ⚠ <i style="background:#fce4d6"></i>ต้องยืนยัน <i style="background:#fff2cc"></i>ไม่มี ENTER เทียบ</div>
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="ค้นหา B/L / ผู้รับ / ตู้ / หมายเหตุ">
+      <label><input type="checkbox" id="onlyBad"> แสดงเฉพาะที่ไม่ตรง</label>
+      <button id="download">ดาวน์โหลด EDI.xlsx</button>
+    </div>
+    <div class="tbl"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+    <details class="log"><summary>ข้อความจากโปรแกรม (ชนิดหน้า ENTER, หน้าที่อ่านด้วย OCR, หน้าที่อ่านไม่ได้)</summary><pre id="log"></pre></details>
+  </section>
+</main>
+<footer><a href="guide.html">คู่มือการใช้งาน / ดาวน์โหลดโปรแกรม</a> · <a href="https://github.com/Rattanao/Various-forms">github.com/Rattanao/Various-forms</a></footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.28.3/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script src="app/app.js?v=20261127c"></script>
+</body>
+</html>

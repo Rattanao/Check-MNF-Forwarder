@@ -8,6 +8,7 @@
 
 | เมนู | ต้นฉบับ |
 |---|---|
+| Check All Forms (ENTER ชุดรวมหลายฟอร์ม, เมนูบนสุด) | [Various-forms](https://github.com/Rattanao/Various-forms) |
 | Able | [check-edi-Able](https://github.com/Rattanao/check-edi-Able) |
 | AGN | [check-edi-AGN](https://github.com/Rattanao/check-edi-AGN) |
 | Cargoport | [Cargoport](https://github.com/Rattanao/Cargoport) |
