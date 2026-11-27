@@ -171,7 +171,6 @@ body.locked .layout, body.locked .side, body.locked .guide, body.locked .burger 
 <script src="auth.js"></script>
 <script>
 const ICON = {
-  all:   '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5l2.5 2.5 4.5-5"/>',
   check: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/>',
   clock: '<circle cx="12" cy="13" r="7"/><path d="M12 9v4l2.5 2M9 3h6"/>',
   swap:  '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
@@ -181,9 +180,6 @@ const ICON = {
   book:  '<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 006.5 23H20v-5M8 7h8M8 11h6"/>'
 };
 const GROUPS = [
-  { name: "Check All Forms", tools: [
-    { id: "all-forms", title: "Check All Forms", desc: "Compare the MANIFEST with a bundled ENTER (one PDF that combines many forwarders' forms) → EDI.xlsx", src: "tools/all-forms/index.html", icon: "all" }
-  ]},
   { name: "Check EDI by forwarder", tools: [
     { id: "able",      title: "Able",      desc: "Compare the MANIFEST (.xls or PDF) with the ENTER (Able form) → EDI.xlsx", src: "tools/able/index.html", icon: "check" },
     { id: "agn",       title: "AGN",       desc: "Compare the MANIFEST with the ENTER (AGN AMENDMENT) → EDI.xlsx", src: "tools/agn/index.html", icon: "check" },

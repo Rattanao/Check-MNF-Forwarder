@@ -11,15 +11,10 @@ trap 'rm -rf "$tmp"' EXIT
 while read -r id repo; do
   [ -z "$id" ] && continue
   git clone -q --depth 1 "https://github.com/Rattanao/$repo.git" "$tmp/$id"
-  src="$tmp/$id/docs"
-  { [ -f "$src/index.html" ] && [ ! -d "$tmp/$id/app" ]; } || src="$tmp/$id"
+  src="$tmp/$id/docs"; [ -f "$src/index.html" ] || src="$tmp/$id"
   rm -rf "tools/$id" && mkdir -p "tools/$id"
   if [ "$src" = "$tmp/$id/docs" ]; then
     cp -r "$src"/. "tools/$id/"        # docs/ ทั้งโฟลเดอร์ (core.js, โลโก้, assets/)
-  elif [ -d "$src/app" ]; then
-    # repo ที่เวปอยู่ที่ root + app/ + scripts/*.py รันด้วย Python ในเบราว์เซอร์ (Various-forms)
-    cp -r "$src/app" "tools/$id/app"
-    mkdir -p "tools/$id/scripts" && cp "$src"/scripts/*.py "tools/$id/scripts/"
   else
     cp "$src/core.js" "tools/$id/core.js"   # repo ที่วางเวปไว้ที่ root (Cargoport)
   fi
@@ -28,7 +23,6 @@ while read -r id repo; do
   grep -q 'src="../embed.js"' "tools/$id/index.html" || { echo "ใส่ embed.js ไม่ได้: $id" >&2; exit 1; }
   echo "$id <- $repo $(git -C "$tmp/$id" log -1 --format='%h %cs')"
 done <<'EOF'
-all-forms Various-forms
 able check-edi-Able
 agn check-edi-AGN
 cargoport Cargoport

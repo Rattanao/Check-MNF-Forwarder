@@ -9,32 +9,6 @@
   const R = (re, to) => [new RegExp(re, "g"), to];
 
   const RULES = [
-    // ---- Check All Forms (tools/all-forms จาก Various-forms) ----
-    R(`ไฟล์ MANIFEST \\(\\.xls / \\.xlsx / MF \\.pdf\\) และ ENTER ชุดรวม \\(\\.pdf ไฟล์เดียว\\)`, "MANIFEST file (.xls / .xlsx / MF .pdf) and bundled ENTER (one .pdf file)"),
-    R(`\\(MF แบบ PDF ให้ตั้งชื่อขึ้นต้น MF หรือ MANIFEST\\)`, "(an MF in PDF must have a file name starting with MF or MANIFEST)"),
-    R(`แยก ENTER ทีละหน้า แล้วอ่านด้วยตัวอ่านของแต่ละฟอร์ม \\(ARRIVAL NOTICE, จดหมายแก้ไขของ forwarder หลายสิบแบบ,`, "the ENTER is split page by page and each page is read with the reader for its form (ARRIVAL NOTICE, dozens of forwarder amendment letters,"),
-    R(`ฯลฯ\\)`, "etc.)"),
-    R(`ก่อน(\\s*)$`, "before$1"),
-    R(`^ ?ตรวจ 30 ตัวอักษรแรก`, " only the first 30 characters are checked"),
-    R(`กรอบสีแดงของลูกค้า = ตรวจเฉพาะในกรอบ`, "customer's red box = only what is inside the box is checked"),
-    R(`UN/CLASS ตรงกัน = ไม่เตือน`, "UN/CLASS match = no warning"),
-    R(`TEMP ตรงกัน = ไม่เตือน แต่ MF ไม่มี VENT = เตือน`, "TEMP match = no warning, but no VENT in the MF = warning"),
-    R(`ถูกต้องตามกฎ =`, "correct by the rules ="),
-    R(`ไม่ตรวจ SHED`, "SHED is not checked"),
-    R(`แสดงทุก B/L ของ MF เรียงตาม MF —`, "every B/L of the MF is shown, in MF order —"),
-    R(`ไม่มี ENTER = ช่อง B/L NO\\. สีเหลือง`, "no ENTER = B/L NO. cell yellow"),
-    R(`หน้าที่เป็นภาพสแกนอ่านด้วย OCR = สีส้ม ตรวจด้วยตา`, "scanned pages read by OCR = orange, check them by eye"),
-    R(`ครั้งแรกต้องโหลดตัวประมวลผล \\(~40 MB\\) ใช้เวลาสักครู่`, "the first run downloads the processor (~40 MB) and takes a moment"),
-    R(`กำลังโหลดตัวประมวลผล Python \\(ครั้งแรกใช้เวลาสักครู่\\)…`, "Loading the Python processor (the first time takes a moment)…"),
-    R(`กำลังโหลดไลบรารีอ่าน PDF / Excel…`, "Loading the PDF / Excel libraries…"),
-    R(`กำลังโหลดโปรแกรมตรวจ…`, "Loading the checker…"),
-    R(`กำลังอ่านไฟล์…`, "Reading the files…"),
-    R(`กำลังแยกชนิดหน้าและอ่านทุกฟอร์ม…`, "Sorting the pages and reading every form…"),
-    R(`กำลังเทียบกับ MANIFEST \\(รอบสุดท้าย\\)…`, "Comparing with the MANIFEST (final pass)…"),
-    R(`^เสร็จแล้ว$`, "Done"), R(`^ตรวจไม่สำเร็จ$`, "Check failed"),
-    R(`^ยอดรวมตรงกัน$`, "Totals match"), R(`^⚠ ยอดรวมไม่ตรง$`, "⚠ Totals do not match"),
-    R(`ข้อความจากโปรแกรม \\(ชนิดหน้า ENTER, หน้าที่อ่านด้วย OCR, หน้าที่อ่านไม่ได้\\)`, "Program messages (ENTER page types, pages read by OCR, pages that could not be read)"),
-
     // ---- หัว/คำอธิบายในไฟล์ EDI.xlsx (ก่อนคำสั้นด้านล่าง) ----
     R(`รายงานตรวจสอบเอกสารขาเข้าเรือ  EDI  —  เทียบ ENTER \\(เอกสารลูกค้า\\) กับ MANIFEST \\(สายเรือ\\)  \\|  จุดสำคัญที่มีผลกับใบขนสินค้าขาเข้า`,
       "Import vessel document check  EDI  —  ENTER (customer document) vs MANIFEST (carrier)  |  points that affect the import customs declaration"),
